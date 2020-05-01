@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Model\Canvas;
 use App\Utils\RequestParser;
-use SimpleXMLElement;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use GuzzleHttp\Exception\ClientException;
 
 class PaymentController extends Controller
 {
