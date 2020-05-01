@@ -44,4 +44,5 @@ $router->get('/payment-session', function () use ($router) {
 
 });
 
+$router->post('/payment', 'PaymentController@pay');
 
