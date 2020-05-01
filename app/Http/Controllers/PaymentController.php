@@ -28,7 +28,7 @@ class PaymentController extends Controller
     
         try{
 
-            $response = $this->client->request('POST', '/sessions', [
+            $response = $this->client->request('POST', 'sessions', [
                 'query' => [
                     'email' => $email,
                     'token' => $token
@@ -53,6 +53,61 @@ class PaymentController extends Controller
         }       
         
     }
+
+    public function pay (Request $request): JsonResponse
+    {
+        $email = env('PAGSEGURO_EMAIL');
+        $token = env('PAGSEGURO_TOKEN');
+
+        $params = [
+            'paymentMode' => 'default',
+            'paymentMethod' => 'boleto',
+            'currency' => 'BRL',
+            'extraAmount' => '0.00',
+            'itemId1' => '0001',
+            'itemDescription1' => 'Notebook Prata',
+            'itemAmount1' => '24300.00',
+            'itemQuantity1' => 1,
+            'notificationURL' => 'https://sualoja.com.br/notifica.html',
+            'reference' => 'REF1234',
+            'senderName' => 'Jose Comprador',
+            'senderCPF' => '72962940005',
+            'senderAreaCode' => '11',
+            'senderPhone' => '56273440',
+            'senderEmail' => 'c83751767534161822146@sandbox.pagseguro.com.br',
+            'senderHash' => $request->all()['sender']['hash'],
+            'shippingAddressRequired' => 'true',
+            'shippingAddressStreet' => 'Av. Brig. Faria Lima',
+            'shippingAddressNumber' => '1384',
+            'shippingAddressComplement' => '5o andar',
+            'shippingAddressDistrict' => 'Jardim Paulistano',
+            'shippingAddressPostalCode' => '01452002',
+            'shippingAddressCity' => 'Sao Paulo',
+            'shippingAddressState' => 'SP',
+            'shippingAddressCountry' => 'BRA',
+            'shippingType' => '1',
+            'shippingCost' => '1.00',
+            'email' => $email,
+            'token' => $token,
+        ];
+        
+        $response = $this->client->request('POST', 'transactions',
+            [
+                'form_params' => $params,
+                'query' => [
+                    'email' => $email,
+                    'token' => $token,
+                ]
+            ]
+        );
+
+        return response()->json($request->all());
+
+    }
+
+
+    /*
+    This code will be removed soon
 
     public function pay (Request $request): JsonResponse
     {
@@ -102,8 +157,7 @@ class PaymentController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
 
-
         return response()->json($request->all());
     }
-
+    */
 }
