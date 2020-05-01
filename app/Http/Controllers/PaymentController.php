@@ -36,7 +36,7 @@ class PaymentController extends Controller
             'senderAreaCode' => '11',
             'senderPhone' => '56273440',
             'senderEmail' => 'c83751767534161822146@sandbox.pagseguro.com.br',
-            'senderHash' => $request->all()['sender']['hash'].'111111',
+            'senderHash' => $request->all()['sender']['hash'],
             'shippingAddressRequired' => 'true',
             'shippingAddressStreet' => 'Av. Brig. Faria Lima',
             'shippingAddressNumber' => '1384',
