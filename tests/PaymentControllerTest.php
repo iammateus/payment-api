@@ -16,6 +16,6 @@ class PaymentControllerTest extends TestCase
                 'token'
             ]
         ]);
-        var_dump($this->response->getContent());
     }
+    
 }

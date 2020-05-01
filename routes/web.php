@@ -20,29 +20,6 @@ $router->get('/healthcheck', function () use ($router) {
     ]);
 });
 
-$router->get('/payment-session', function () use ($router) {
-
-    $client = new Client( [ 'base_uri' => env('PAGSEGURO_URL') ] );
-
-    $email = env('PAGSEGURO_EMAIL');
-    $token = env('PAGSEGURO_TOKEN');
-
-    $endpoint = '/sessions?email='.$email.'&token='.$token;
-
-    $response = $client->request('POST', $endpoint);
-    
-    $response = new SimpleXMLElement($response->getBody()->getContents());
-
-    $token = (string) $response->id;
-
-    return response()->json([
-        'message' => 'SUCCESS',
-        'data' => [
-            'token' => $token
-        ]
-    ]);
-
-});
-
+$router->get('/payment-session', 'PaymentController@session');
 $router->post('/payment', 'PaymentController@pay');
 

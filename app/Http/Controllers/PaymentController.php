@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Model\Canvas;
+use App\Utils\RequestParser;
 use SimpleXMLElement;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -13,9 +14,48 @@ use GuzzleHttp\Exception\ClientException;
 
 class PaymentController extends Controller
 {
+    private Client $client;
 
-    public function pay (Request $request) {
+    public function __construct()
+    {
+        $this->client = new Client( [ 'base_uri' => env('PAGSEGURO_URL') ] );
+    }
 
+    public function session (): JsonResponse
+    {
+        $email = env('PAGSEGURO_EMAIL');
+        $token = env('PAGSEGURO_TOKEN');
+    
+        try{
+
+            $response = $this->client->request('POST', '/sessions', [
+                'query' => [
+                    'email' => $email,
+                    'token' => $token
+                ]
+            ]);
+            
+            $response = RequestParser::parse($response);
+        
+            $token = (string) $response->id;
+        
+            return response()->json([
+                'message' => 'SUCCESS',
+                'data' => [
+                    'token' => $token
+                ]
+            ]);
+
+        }catch(Exception $e){
+
+            return response()->json( [ 'error' => $e->getMessage() ], Response::HTTP_INTERNAL_SERVER_ERROR );
+            
+        }       
+        
+    }
+
+    public function pay (Request $request): JsonResponse
+    {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
         $url =  env('PAGSEGURO_URL') . 'transactions';
