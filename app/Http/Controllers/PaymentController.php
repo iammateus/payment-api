@@ -55,7 +55,6 @@ class PaymentController extends Controller
     {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
-
         $requestAll = $request->all();
 
         $params = [
