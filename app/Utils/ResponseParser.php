@@ -5,7 +5,7 @@ namespace App\Utils;
 use SimpleXMLElement;
 use Psr\Http\Message\ResponseInterface;
 
-class RequestParser {
+class ResponseParser {
 
     /**
      * Parse a XML response to a object

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Utils\RequestParser;
+use App\Utils\ResponseParser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,7 +32,7 @@ class PaymentController extends Controller
                 ]
             ]);
             
-            $response = RequestParser::parse($response);
+            $response = ResponseParser::parse($response);
         
             $token = (string) $response->id;
         
@@ -56,6 +56,8 @@ class PaymentController extends Controller
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
 
+        $requestAll = $request->all();
+
         $params = [
             'paymentMode' => 'default',
             'paymentMethod' => 'boleto',
@@ -67,27 +69,17 @@ class PaymentController extends Controller
             'itemQuantity1' => 1,
             'notificationURL' => 'https://sualoja.com.br/notifica.html',
             'reference' => 'REF1234',
-            'senderName' => 'Jose Comprador',
-            'senderCPF' => '72962940005',
-            'senderAreaCode' => '11',
-            'senderPhone' => '56273440',
-            'senderEmail' => 'c83751767534161822146@sandbox.pagseguro.com.br',
-            'senderHash' => $request->all()['sender']['hash'],
-            'shippingAddressRequired' => 'true',
-            'shippingAddressStreet' => 'Av. Brig. Faria Lima',
-            'shippingAddressNumber' => '1384',
-            'shippingAddressComplement' => '5o andar',
-            'shippingAddressDistrict' => 'Jardim Paulistano',
-            'shippingAddressPostalCode' => '01452002',
-            'shippingAddressCity' => 'Sao Paulo',
-            'shippingAddressState' => 'SP',
-            'shippingAddressCountry' => 'BRA',
-            'shippingType' => '1',
-            'shippingCost' => '1.00',
+            'senderName' => $requestAll['sender']['name'],
+            'senderCPF' => $requestAll['sender']['document']['value'],
+            'senderAreaCode' => $requestAll['sender']['phone']['areaCode'],
+            'senderPhone' => $requestAll['sender']['phone']['number'],
+            'senderEmail' => 'test@sandbox.pagseguro.com.br',
+            'senderHash' => $requestAll['sender']['hash'],
+            'shippingAddressRequired' => 'false',
             'email' => $email,
             'token' => $token,
         ];
-        
+
         $response = $this->client->request('POST', 'transactions',
             [
                 'form_params' => $params,
@@ -98,7 +90,16 @@ class PaymentController extends Controller
             ]
         );
 
-        return response()->json($request->all());
+        $response = ResponseParser::parse($response);
+
+        $paymentLink = (string) $response->paymentLink;
+
+        return response()->json([
+            'message' => 'SUCCESS',
+            'data' => [
+                'paymentLink' => $paymentLink
+            ]
+        ]);
 
     }
 
