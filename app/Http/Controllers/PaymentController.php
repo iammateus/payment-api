@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PaymentService;
 use Exception;
 use App\Utils\ResponseParser;
 use GuzzleHttp\Client;
@@ -12,10 +13,12 @@ use Illuminate\Http\JsonResponse;
 class PaymentController extends Controller
 {
     private Client $client;
+    private PaymentService $paymentService;
 
-    public function __construct()
+    public function __construct(PaymentService $paymentService)
     {
         $this->client = new Client( [ 'base_uri' => env('PAGSEGURO_URL') ] );
+        $this->paymentService = $paymentService;
     }
 
     public function session (): JsonResponse
@@ -43,52 +46,18 @@ class PaymentController extends Controller
             ]);
 
         }catch(Exception $e){
-            return response()->json( [ 'error' => $e->getMessage() ], Response::HTTP_INTERNAL_SERVER_ERROR );
+            return response()->json( [ 'error' => 'Error while trying to generate payment session' ], Response::HTTP_INTERNAL_SERVER_ERROR );
             
         }       
     }
 
     public function pay (Request $request): JsonResponse
     {
-        $email = env('PAGSEGURO_EMAIL');
-        $token = env('PAGSEGURO_TOKEN');
-        $requestAll = $request->all();
+        $paymentOptions = $request->all();
 
-        $params = [
-            'paymentMode' => 'default',
-            'paymentMethod' => 'boleto',
-            'currency' => 'BRL',
-            'extraAmount' => '0.00',
-            'itemId1' => '0001',
-            'itemDescription1' => 'Notebook Prata',
-            'itemAmount1' => '24300.00',
-            'itemQuantity1' => 1,
-            'notificationURL' => 'https://sualoja.com.br/notifica.html',
-            'reference' => 'REF1234',
-            'senderName' => $requestAll['sender']['name'],
-            'senderCPF' => $requestAll['sender']['document']['value'],
-            'senderAreaCode' => $requestAll['sender']['phone']['areaCode'],
-            'senderPhone' => $requestAll['sender']['phone']['number'],
-            'senderEmail' => 'test@sandbox.pagseguro.com.br',
-            'senderHash' => $requestAll['sender']['hash'],
-            'shippingAddressRequired' => 'false',
-            'email' => $email,
-            'token' => $token,
-        ];
+        $payment = $this->paymentService->pay($paymentOptions);
 
-        $response = $this->client->request('POST', 'transactions',
-            [
-                'form_params' => $params,
-                'query' => [
-                    'email' => $email,
-                    'token' => $token,
-                ]
-            ]
-        );
-
-        $response = ResponseParser::parse($response);
-
-        $paymentLink = (string) $response->paymentLink;
+        $paymentLink = (string) $payment->paymentLink;
 
         return response()->json([
             'message' => 'SUCCESS',
@@ -96,7 +65,6 @@ class PaymentController extends Controller
                 'paymentLink' => $paymentLink
             ]
         ]);
-
     }
 
 }
