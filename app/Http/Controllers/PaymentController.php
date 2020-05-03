@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -46,25 +47,35 @@ class PaymentController extends Controller
             ]);
 
         }catch(Exception $e){
-            return response()->json( [ 'error' => 'Error while trying to generate payment session' ], Response::HTTP_INTERNAL_SERVER_ERROR );
+            $message = 'Error while trying to generate payment session';
+            Log::error($message, [$e]);
+            return response()->json( [ 'error' => $message ], Response::HTTP_INTERNAL_SERVER_ERROR );
             
         }       
     }
 
     public function pay (Request $request): JsonResponse
     {
-        $paymentOptions = $request->all();
+        try{
+            $paymentOptions = $request->all();
 
-        $payment = $this->paymentService->pay($paymentOptions);
+            $payment = $this->paymentService->pay($paymentOptions);
 
-        $paymentLink = (string) $payment->paymentLink;
+            $paymentLink = (string) $payment->paymentLink;
 
-        return response()->json([
-            'message' => 'SUCCESS',
-            'data' => [
-                'paymentLink' => $paymentLink
-            ]
-        ]);
+            return response()->json([
+                'message' => 'SUCCESS',
+                'data' => [
+                    'paymentLink' => $paymentLink
+                ]
+            ]);
+
+        }catch(Exception $e){
+            $message = 'Error while trying to make payment';
+            Log::error($message, [$e]);
+            return response()->json( [ 'error' => $message ], Response::HTTP_INTERNAL_SERVER_ERROR );
+            
+        } 
     }
 
 }
