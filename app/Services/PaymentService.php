@@ -19,15 +19,13 @@ class PaymentService
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
 
+        $itemsParams = $this->formatItemsFromArray($paymentOptions['items']);
+
         $params = [
             'paymentMode' => 'default',
             'paymentMethod' => 'boleto',
             'currency' => 'BRL',
             'extraAmount' => '0.00',
-            'itemId1' => '0001',
-            'itemDescription1' => 'Notebook Prata',
-            'itemAmount1' => '24300.00',
-            'itemQuantity1' => 1,
             'notificationURL' => 'https://sualoja.com.br/notifica.html',
             'reference' => 'REF1234',
             'senderName' => $paymentOptions['sender']['name'],
@@ -40,6 +38,8 @@ class PaymentService
             'email' => $email,
             'token' => $token,
         ];
+
+        $params = array_merge( $params, $itemsParams );
 
         $response = $this->client->request('POST', 'transactions',
             [
@@ -55,4 +55,20 @@ class PaymentService
 
         return $response;
     }
+
+    public function formatItemsFromArray(array $items): array
+    {
+        $formatedItems = [];
+
+        foreach ($items as $key => $item) {
+            $itemNumber = $key + 1;
+            $formatedItems['itemId'.$itemNumber] = $item['id'];
+            $formatedItems['itemDescription'.$itemNumber] = $item['description'];
+            $formatedItems['itemQuantity'.$itemNumber] = $item['quantity'];
+            $formatedItems['itemAmount'.$itemNumber] = $item['amount'];
+        }
+
+        return $formatedItems;
+    }
+
 }
