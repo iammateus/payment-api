@@ -1,8 +1,5 @@
 <?php
 
-use App\Model\Canvas;
-use GuzzleHttp\Client;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
