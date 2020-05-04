@@ -18,6 +18,7 @@ class PaymentService
     {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
+        $notificationUrl = env('PAGSEGURO_NOTIFICATION_URL');
 
         $itemsParams = $this->formatItemsFromArray($paymentOptions['items']);
 
@@ -25,9 +26,7 @@ class PaymentService
             'paymentMode' => 'default',
             'paymentMethod' => 'boleto',
             'currency' => 'BRL',
-            'extraAmount' => '0.00',
-            'notificationURL' => 'https://sualoja.com.br/notifica.html',
-            'reference' => 'REF1234',
+            'notificationURL' => $notificationUrl,
             'senderName' => $paymentOptions['sender']['name'],
             'senderCPF' => $paymentOptions['sender']['document']['value'],
             'senderAreaCode' => $paymentOptions['sender']['phone']['areaCode'],
