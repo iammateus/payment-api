@@ -22,9 +22,21 @@ class PaymentService
 
         $itemsParams = $this->formatItemsFromArray($paymentOptions['items']);
 
-        $params = [
+        $paymentParams = [];
+
+        switch ($paymentOptions['method']) {
+            case 'BOLETO':
+                $paymentParams = $this->getBoletoPaymentParams($paymentOptions);
+            break;
+            case 'CREDIT_CARD':
+                $paymentParams = $this->getCreditCardPaymentParams($paymentOptions);
+            break;
+            default:
+            break;
+        }
+
+        $defaultParams = [
             'paymentMode' => 'default',
-            'paymentMethod' => 'boleto',
             'currency' => 'BRL',
             'notificationURL' => $notificationUrl,
             'senderName' => $paymentOptions['sender']['name'],
@@ -36,9 +48,10 @@ class PaymentService
             'shippingAddressRequired' => 'false',
             'email' => $email,
             'token' => $token,
+            'extraAmount' => $paymentOptions['extraAmount']
         ];
 
-        $params = array_merge( $params, $itemsParams );
+        $params = array_merge( $defaultParams, $itemsParams, $paymentParams );
 
         $response = $this->client->request('POST', 'transactions',
             [
@@ -68,6 +81,41 @@ class PaymentService
         }
 
         return $formatedItems;
+    }
+
+    public function getBoletoPaymentParams(array $paymentOptions): array
+    {
+        $params = [
+            'paymentMethod' => 'boleto',
+        ];
+
+        return $params;
+    }
+    
+    public function getCreditCardPaymentParams(array $paymentOptions): array
+    {
+        $params = [
+            'paymentMethod' => 'creditCard',
+            'creditCardToken' => $paymentOptions['creditCard']['token'],
+            'installmentQuantity' => $paymentOptions['creditCard']['installment']['quantity'],
+            'installmentValue' => number_format($paymentOptions['creditCard']['installment']['installmentAmount'], 2),
+            'noInterestInstallmentQuantity' => $paymentOptions['creditCard']['maxInstallmentNoInterest'],
+            'creditCardHolderName' => 'Jose Comprador',
+            'creditCardHolderCPF' => '22111944785',
+            'creditCardHolderBirthDate' => '27/10/1987',
+            'creditCardHolderAreaCode' => '11',
+            'creditCardHolderPhone' => '56273440',
+            'billingAddressStreet' => 'Av. Brig. Faria Lima',
+            'billingAddressNumber' => '1384',
+            'billingAddressComplement' => '5o andar',
+            'billingAddressDistrict' => 'Jardim Paulistano',
+            'billingAddressPostalCode' => '01452002',
+            'billingAddressCity' => 'Sao Paulo',
+            'billingAddressState' => 'SP',
+            'billingAddressCountry' => 'BRA'
+        ];
+
+        return $params;
     }
 
 }
