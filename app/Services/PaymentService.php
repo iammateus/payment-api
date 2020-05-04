@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use GuzzleHttp\Client;
 use App\Utils\ResponseParser;
 
@@ -18,7 +19,6 @@ class PaymentService
     {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
-        $notificationUrl = env('PAGSEGURO_NOTIFICATION_URL');
 
         $itemsParams = $this->formatItemsFromArray($paymentOptions['items']);
 
@@ -32,24 +32,11 @@ class PaymentService
                 $paymentParams = $this->getCreditCardPaymentParams($paymentOptions);
             break;
             default:
+                throw new Exception('Payment method not supported', 1);
             break;
         }
 
-        $defaultParams = [
-            'paymentMode' => 'default',
-            'currency' => 'BRL',
-            'notificationURL' => $notificationUrl,
-            'senderName' => $paymentOptions['sender']['name'],
-            'senderCPF' => $paymentOptions['sender']['document']['value'],
-            'senderAreaCode' => $paymentOptions['sender']['phone']['areaCode'],
-            'senderPhone' => $paymentOptions['sender']['phone']['number'],
-            'senderEmail' => 'test@sandbox.pagseguro.com.br',
-            'senderHash' => $paymentOptions['sender']['hash'],
-            'shippingAddressRequired' => 'false',
-            'email' => $email,
-            'token' => $token,
-            'extraAmount' => $paymentOptions['extraAmount']
-        ];
+        $defaultParams = $this->getDefaultPaymentParams($paymentOptions);
 
         $params = array_merge( $defaultParams, $itemsParams, $paymentParams );
 
@@ -81,6 +68,31 @@ class PaymentService
         }
 
         return $formatedItems;
+    }
+
+    public function getDefaultPaymentParams(array $paymentOptions): array
+    {
+        $email = env('PAGSEGURO_EMAIL');
+        $token = env('PAGSEGURO_TOKEN');
+        $notificationUrl = env('PAGSEGURO_NOTIFICATION_URL');
+
+        $params = [
+            'paymentMode' => 'default',
+            'currency' => 'BRL',
+            'notificationURL' => $notificationUrl,
+            'senderName' => $paymentOptions['sender']['name'],
+            'senderCPF' => $paymentOptions['sender']['document']['value'],
+            'senderAreaCode' => $paymentOptions['sender']['phone']['areaCode'],
+            'senderPhone' => $paymentOptions['sender']['phone']['number'],
+            'senderEmail' => 'test@sandbox.pagseguro.com.br',
+            'senderHash' => $paymentOptions['sender']['hash'],
+            'shippingAddressRequired' => 'false',
+            'email' => $email,
+            'token' => $token,
+            'extraAmount' => $paymentOptions['extraAmount']
+        ];
+
+        return $params;
     }
 
     public function getBoletoPaymentParams(array $paymentOptions): array

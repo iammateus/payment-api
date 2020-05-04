@@ -61,13 +61,9 @@ class PaymentController extends Controller
 
             $payment = $this->paymentService->pay($paymentOptions);
 
-            $paymentLink = (string) $payment->paymentLink;
-
             return response()->json([
                 'message' => 'SUCCESS',
-                'data' => [
-                    'paymentLink' => $paymentLink
-                ]
+                'data' => $payment
             ]);
 
         }catch(Exception $e){
