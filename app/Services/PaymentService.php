@@ -31,6 +31,9 @@ class PaymentService
             case 'CREDIT_CARD':
                 $paymentParams = $this->getCreditCardPaymentParams($paymentOptions);
             break;
+            case 'ONLINE_DEBIT':
+                $paymentParams = $this->getOnlineDebitPaymentParams($paymentOptions);
+            break;
             default:
                 throw new Exception('Payment method not supported', 1);
             break;
@@ -125,6 +128,16 @@ class PaymentService
             'billingAddressCity' => 'Sao Paulo',
             'billingAddressState' => 'SP',
             'billingAddressCountry' => 'BRA'
+        ];
+
+        return $params;
+    }
+    
+    public function getOnlineDebitPaymentParams(array $paymentOptions): array
+    {
+        $params = [
+            'paymentMethod' => 'eft',
+            'bankName' => $paymentOptions['bank']['name']
         ];
 
         return $params;
