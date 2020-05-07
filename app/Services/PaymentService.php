@@ -20,8 +20,6 @@ class PaymentService
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
 
-        $itemsParams = $this->formatItemsFromArray($paymentOptions['items']);
-
         $paymentParams = [];
 
         switch ($paymentOptions['method']) {
@@ -41,6 +39,8 @@ class PaymentService
 
         $defaultParams = $this->getDefaultPaymentParams($paymentOptions);
 
+        $itemsParams = $this->formatItemsFromArray($paymentOptions['items']);
+        
         $params = array_merge( $defaultParams, $itemsParams, $paymentParams );
 
         $response = $this->client->request('POST', 'transactions',
@@ -75,8 +75,6 @@ class PaymentService
 
     public function getDefaultPaymentParams(array $paymentOptions): array
     {
-        $email = env('PAGSEGURO_EMAIL');
-        $token = env('PAGSEGURO_TOKEN');
         $notificationUrl = env('PAGSEGURO_NOTIFICATION_URL');
 
         $params = [
@@ -90,8 +88,6 @@ class PaymentService
             'senderEmail' => 'test@sandbox.pagseguro.com.br',
             'senderHash' => $paymentOptions['sender']['hash'],
             'shippingAddressRequired' => 'false',
-            'email' => $email,
-            'token' => $token,
             'extraAmount' => $paymentOptions['extraAmount']
         ];
 
