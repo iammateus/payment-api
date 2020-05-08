@@ -16,3 +16,5 @@ $router->get('/healthcheck', function () use ($router) {
         'The server is running (Canvas)'
     ]);
 });
+
+$router->get('/session', 'SessionController@store');
