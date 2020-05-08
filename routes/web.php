@@ -16,7 +16,3 @@ $router->get('/healthcheck', function () use ($router) {
         'The server is running (Canvas)'
     ]);
 });
-
-$router->get('/session', 'PaymentController@session');
-$router->post('/payment', 'PaymentController@pay');
-
