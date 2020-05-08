@@ -15,6 +15,23 @@ class PaymentService
         $this->client = new Client( [ 'base_uri' => env('PAGSEGURO_URL') ] );
     }
 
+    public function session(): object
+    {
+        $email = env('PAGSEGURO_EMAIL');
+        $token = env('PAGSEGURO_TOKEN');
+
+        $response = $this->client->request('POST', 'sessions', [
+            'query' => [
+                'email' => $email,
+                'token' => $token
+            ]
+        ]);
+
+        $response = ResponseParser::parse($response);
+    
+        return $response;
+    }
+
     public function pay(array $paymentOptions): object
     {
         $email = env('PAGSEGURO_EMAIL');
@@ -138,5 +155,4 @@ class PaymentService
 
         return $params;
     }
-
 }

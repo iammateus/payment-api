@@ -17,6 +17,6 @@ $router->get('/healthcheck', function () use ($router) {
     ]);
 });
 
-$router->get('/payment-session', 'PaymentController@session');
+$router->get('/session', 'PaymentController@session');
 $router->post('/payment', 'PaymentController@pay');
 

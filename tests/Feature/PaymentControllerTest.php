@@ -8,7 +8,7 @@ class PaymentControllerTest extends TestCase
 {
     public function testGetPaymentSessionTokenExpectingSuccess()
     {
-        $this->get('/payment-session');
+        $this->get('/session');
         $this->assertResponseStatus(Response::HTTP_OK);
         $this->seeJsonStructure([
             'message',
@@ -17,5 +17,4 @@ class PaymentControllerTest extends TestCase
             ]
         ]);
     }
-    
 }
