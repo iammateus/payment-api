@@ -18,3 +18,5 @@ $router->get('/healthcheck', function () use ($router) {
 });
 
 $router->get('/session', 'SessionController@store');
+
+$router->post('/payment', 'PaymentController@store');
