@@ -15,6 +15,11 @@ class SessionController extends Controller
         $this->sessionService = $sessionService;
     }
 
+    /**
+     * Request a new session to Pagseguro and returns the session token
+     *
+     * @return JsonResponse
+     */
     public function store (): JsonResponse
     {
         $session = $this->sessionService->store();

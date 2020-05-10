@@ -9,7 +9,7 @@ use GuzzleHttp\Handler\MockHandler;
 
 class ResponseParserTest extends TestCase
 {
-    public function testParseXmlResponse()
+    public function testParseXml ()
     {
         $faker = Faker::create();
 
@@ -25,15 +25,15 @@ class ResponseParserTest extends TestCase
         ];
 
         $mock = new MockHandler( [ new Response( 200, $headers, $body ) ] );
-        $handlerStack = HandlerStack::create($mock);
+        $handlerStack = HandlerStack::create( $mock );
 
-        $client = new Client(['handler' => $handlerStack]);
+        $client = new Client( [ 'handler' => $handlerStack ] );
         $response = $client->request('GET', '/');
 
-        $response = ResponseParser::parseXml($response);
-        $this->assertIsObject($response);
+        $response = ResponseParser::parseXml( $response );
+        $this->assertIsObject( $response );
         
         $responseText = (string) $response->text;
-        $this->assertEquals($text, $responseText);
+        $this->assertEquals( $text, $responseText );
     }
 }
