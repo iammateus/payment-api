@@ -26,6 +26,10 @@ class PaymentControllerTest extends TestCase
             ],
             'items' => [
                 [
+                    'id' => $faker->name,
+                    'description' => $faker->name,
+                    'quantity' => $faker->name,
+                    'amount' => $faker->name
                 ]
             ]
         ];
@@ -46,6 +50,25 @@ class PaymentControllerTest extends TestCase
             'sender.document.value' => [ 'The sender.document.value field is required.' ],
             'sender.phone.number' => [ 'The sender.phone.number field is required.' ],
             'items' => [ 'The items field is required.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSendItemsRequiredDataExpectingUnprocessableEntity()
+    {
+        $data = [
+            'items' => [
+                [
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.id' => [ 'The items.0.id field is required.' ],
+            'items.0.description' => [ 'The items.0.description field is required.' ],
+            'items.0.quantity' => [ 'The items.0.quantity field is required.' ],
+            'items.0.amount' => [ 'The items.0.amount field is required.' ]
         ]);
     }
 }

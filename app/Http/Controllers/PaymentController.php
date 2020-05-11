@@ -27,10 +27,10 @@ class PaymentController extends Controller
             'sender.email' => 'required',
             'sender.hash' => 'required',
             'items' => 'required',
-            // 'items.*.id' => 'required',
-            // 'items.*.description' => 'required',
-            // 'items.*.quantity' => 'required',
-            // 'items.*.amount' => 'required'
+            'items.*.id' => 'required',
+            'items.*.description' => 'required',
+            'items.*.quantity' => 'required',
+            'items.*.amount' => 'required'
         ]);
 
         return response()->json();
