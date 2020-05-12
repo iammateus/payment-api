@@ -16,5 +16,9 @@ class SessionControllerTest extends TestCase
                 'token'
             ]
         ]);
+
+        $decodedResponse = json_decode($this->response->getContent());
+        $this->assertNotEmpty($decodedResponse->data->token);
+        $this->assertIsString($decodedResponse->data->token);
     }
 }
