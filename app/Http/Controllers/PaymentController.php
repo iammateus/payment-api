@@ -19,22 +19,6 @@ class PaymentController extends Controller
 
     public function store (Request $request): JsonResponse
     {
-        $this->validate($request, [
-            'method' => 'required',
-            'sender.name' => 'required',
-            'sender.email' => 'required',
-            'sender.hash' => 'required',
-            'sender.document.value' => 'required',
-            'sender.phone.number' => 'required',
-            'sender.phone.areaCode' => 'required',
-            'items' => 'required',
-            'shipping.addressRequired' => 'required',
-            'items.*.id' => 'required',
-            'items.*.description' => 'required',
-            'items.*.quantity' => 'required',
-            'items.*.amount' => 'required',
-        ]);
-
         return response()->json();
     } 
 }
