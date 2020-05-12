@@ -21,6 +21,7 @@ class PaymentControllerTest extends TestCase
                     'value' => $faker->name
                 ],
                 'phone' => [
+                    'areaCode' => $faker->name,
                     'number' => $faker->name
                 ],
             ],
@@ -31,6 +32,9 @@ class PaymentControllerTest extends TestCase
                     'quantity' => $faker->name,
                     'amount' => $faker->name
                 ]
+            ],
+            'shipping' => [
+                'addressRequired' => $faker->name
             ]
         ];
 
@@ -49,7 +53,9 @@ class PaymentControllerTest extends TestCase
             'sender.hash' => [ 'The sender.hash field is required.' ],
             'sender.document.value' => [ 'The sender.document.value field is required.' ],
             'sender.phone.number' => [ 'The sender.phone.number field is required.' ],
-            'items' => [ 'The items field is required.' ]
+            'sender.phone.areaCode' => [ 'The sender.phone.area code field is required.' ],
+            'items' => [ 'The items field is required.' ],
+            'shipping.addressRequired' => [ 'The shipping.address required field is required.' ]
         ]);
     }
     
