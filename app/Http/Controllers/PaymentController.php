@@ -20,7 +20,9 @@ class PaymentController extends Controller
     public function store (Request $request): JsonResponse
     {
         $this->validate($request, [
-            'method' => 'required|in:BOLETO'
+            'method' => 'required|in:BOLETO',
+            'sender' => 'required',
+            'sender.name' => 'required|string|min_words:2',
         ]);
         return response()->json();
     } 
