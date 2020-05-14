@@ -23,7 +23,10 @@ class PaymentController extends Controller
             'method' => 'required|in:BOLETO',
             'sender' => 'required',
             'sender.name' => 'required|string|min_words:2',
+            'sender.document' => 'required',
+            'sender.document.type' => 'required'
         ]);
+
         return response()->json();
     } 
 }

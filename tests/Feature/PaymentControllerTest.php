@@ -5,6 +5,8 @@ use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
+use function PHPSTORM_META\type;
+
 class PaymentControllerTest extends TestCase
 {
     public function testPayWithBoletoExpectingSuccess()
@@ -14,7 +16,10 @@ class PaymentControllerTest extends TestCase
         $data = [
             'method' => $faker->randomElement( ['BOLETO'] ),
             'sender' => [
-                'name' => $faker->name()
+                'name' => $faker->name(),
+                'document' => [
+                    'type' => 1
+                ]
             ]
         ];
 
@@ -95,6 +100,24 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'sender.name' => [ 'The sender.name must have at last 2 words.' ]
+        ]);
+    }
+
+    public function testPayWithoutSedingSenderDocumentExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.document' => [ 'The sender.document field is required.' ]
+        ]);
+    }
+
+    public function testPayWithoutSedingSenderDocumentTypeExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.document.type' => [ 'The sender.document.type field is required.' ]
         ]);
     }
 }
