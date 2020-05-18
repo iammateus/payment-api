@@ -18,7 +18,7 @@ class PaymentControllerTest extends TestCase
             'sender' => [
                 'name' => $faker->name(),
                 'document' => [
-                    'type' => 1
+                    'type' => 'CPF'
                 ]
             ]
         ];
@@ -118,6 +118,25 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'sender.document.type' => [ 'The sender.document.type field is required.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSedingSenderInvalidDocumentTypeExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create();
+
+        $data = [
+            'sender' => [
+                'document' => [
+                    'type' => $faker->numberBetween()
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.document.type' => [ 'The selected sender.document.type is invalid.' ]
         ]);
     }
 }
