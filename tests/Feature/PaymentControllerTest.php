@@ -5,8 +5,6 @@ use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-use function PHPSTORM_META\type;
-
 class PaymentControllerTest extends TestCase
 {
     public function testPayWithBoletoExpectingSuccess()
@@ -193,6 +191,42 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
+            'sender.document.value' => [ 'The sender.document.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPaySedingValidSenderDocumentCNPJ()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'sender' => [
+                'document' => [
+                    'type' => 'CNPJ',
+                    'value' => $faker->cnpj(false),
+                ]
+            ]
+        ];
+        $this->post('/payment', $data);
+        $this->dontSeeJson([
+            'sender.document.value' => [ 'The sender.document.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPaySedingValidSenderDocumentCPF()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'sender' => [
+                'document' => [
+                    'type' => 'CPF',
+                    'value' => $faker->cpf(false),
+                ]
+            ]
+        ];
+        $this->post('/payment', $data);
+        $this->dontSeeJson([
             'sender.document.value' => [ 'The sender.document.value is not a valid document.' ]
         ]);
     }
