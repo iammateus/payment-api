@@ -25,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('min_words', 'App\Validators\MinWordsValidator@validate', 'The :attribute must have at last :min words.');
+        Validator::extend('document', 'App\Validators\DocumentValidator@validate', 'The :attribute is not a valid document.');
     }
 }

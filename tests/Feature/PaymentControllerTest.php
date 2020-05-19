@@ -11,14 +11,24 @@ class PaymentControllerTest extends TestCase
 {
     public function testPayWithBoletoExpectingSuccess()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('pt_BR');
+
+        $documentType = $faker->randomElement( ['CPF', 'CNPJ'] );
+        $documentValue = $faker->cpf(false);
+
+        if($documentType === 'CNPJ'){
+            $documentValue = $faker->cnpj(false);
+        }
+
+        echo PHP_EOL. '***** Testing with ' . $documentType . ' type of document' . PHP_EOL . PHP_EOL;
 
         $data = [
             'method' => $faker->randomElement( ['BOLETO'] ),
             'sender' => [
                 'name' => $faker->name(),
                 'document' => [
-                    'type' => 'CPF'
+                    'type' => $documentType,
+                    'value' => $documentValue,
                 ]
             ]
         ];
@@ -121,7 +131,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithoutSedingSenderInvalidDocumentTypeExpectingUnprocessableEntity()
+    public function testPaySedingSenderInvalidDocumentTypeExpectingUnprocessableEntity()
     {
         $faker = Faker::create();
 
@@ -139,4 +149,52 @@ class PaymentControllerTest extends TestCase
             'sender.document.type' => [ 'The selected sender.document.type is invalid.' ]
         ]);
     }
+
+    public function testPayWithoutSedingSenderDocumentValueExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.document.value' => [ 'The sender.document.value field is required.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidSenderDocumentCPFValueExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'sender' => [
+                'document' => [
+                    'type' => 'CPF',
+                    'value' => $faker->cnpj(),
+                ]
+            ]
+        ];
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.document.value' => [ 'The sender.document.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidSenderDocumentCNPJValueExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'sender' => [
+                'document' => [
+                    'type' => 'CNPJ',
+                    'value' => $faker->cpf(false),
+                ]
+            ]
+        ];
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.document.value' => [ 'The sender.document.value is not a valid document.' ]
+        ]);
+    }
+
 }
