@@ -11,22 +11,16 @@ class PaymentControllerTest extends TestCase
     {
         $faker = Faker::create('pt_BR');
 
-        $documentType = $faker->randomElement( ['CPF', 'CNPJ'] );
-        $documentValue = $faker->cpf(false);
-
-        if($documentType === 'CNPJ'){
-            $documentValue = $faker->cnpj(false);
-        }
-
-        echo PHP_EOL. '***** Testing with ' . $documentType . ' type of document' . PHP_EOL . PHP_EOL;
-
         $data = [
             'method' => $faker->randomElement( ['BOLETO'] ),
             'sender' => [
                 'name' => $faker->name(),
                 'document' => [
-                    'type' => $documentType,
-                    'value' => $documentValue,
+                    'type' =>  $faker->randomElement( ['CPF'] ),
+                    'value' => $faker->cpf(false),
+                ],
+                'phone' => [
+                    'a'
                 ]
             ]
         ];
@@ -228,6 +222,15 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->dontSeeJson([
             'sender.document.value' => [ 'The sender.document.value is not a valid document.' ]
+        ]);
+    }
+
+    public function testPayWithoutSedingSendePhoneExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.phone' => [ 'The sender.phone field is required.' ]
         ]);
     }
 

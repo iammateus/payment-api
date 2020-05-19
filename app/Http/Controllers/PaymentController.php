@@ -25,7 +25,8 @@ class PaymentController extends Controller
             'sender.name' => 'required|string|min_words:2',
             'sender.document' => 'required',
             'sender.document.type' => 'required|in:CPF,CNPJ',
-            'sender.document.value' => 'required|document:sender.document.type'
+            'sender.document.value' => 'required|document:sender.document.type',
+            'sender.phone' => 'required'
         ]);
 
         return response()->json();
