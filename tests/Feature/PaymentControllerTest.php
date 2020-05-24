@@ -20,7 +20,7 @@ class PaymentControllerTest extends TestCase
                     'value' => $faker->cpf(false),
                 ],
                 'phone' => [
-                    'a'
+                    'areaCode' => $faker->areaCode()
                 ]
             ]
         ];
@@ -231,6 +231,36 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'sender.phone' => [ 'The sender.phone field is required.' ]
+        ]);
+    }
+
+    public function testPayWithoutSedingSenderPhoneAreaCodeExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.phone.areaCode' => [ 'The sender.phone.area code field is required.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidSenderPhoneAreaCodeExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $numberOfDigits = $faker->randomElement([ 1, 3 ]);
+
+        $data = [
+            'sender' => [
+                'phone' => [
+                    'areaCode' => $faker->randomNumber($numberOfDigits)
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.phone.areaCode' => [ 'The sender.phone.area code must be a valid Brazil area code.' ]
         ]);
     }
 

@@ -26,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('min_words', 'App\Validators\MinWordsValidator@validate', 'The :attribute must have at last :min words.');
         Validator::extend('document', 'App\Validators\DocumentValidator@validate', 'The :attribute is not a valid document.');
+        Validator::extend('area_code', 'App\Validators\AreaCodeValidator@validate', 'The :attribute must be a valid Brazil area code.');
     }
 }
