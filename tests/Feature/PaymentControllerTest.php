@@ -225,7 +225,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSendePhoneExpectingUnprocessableEntity()
+    public function testPayWithoutSedingSenderPhoneExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
