@@ -27,7 +27,8 @@ class PaymentController extends Controller
             'sender.document.type' => 'required|in:CPF,CNPJ',
             'sender.document.value' => 'required|document:sender.document.type',
             'sender.phone' => 'required',
-            'sender.phone.areaCode' => 'required|area_code'
+            'sender.phone.areaCode' => 'required|area_code',
+            'sender.phone.number' => 'required|digits_between:8,9'
         ]);
 
         return response()->json();

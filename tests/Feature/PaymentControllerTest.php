@@ -20,7 +20,8 @@ class PaymentControllerTest extends TestCase
                     'value' => $faker->cpf(false),
                 ],
                 'phone' => [
-                    'areaCode' => $faker->areaCode()
+                    'areaCode' => $faker->areaCode(),
+                    'number' => $faker->numberBetween(10000000, 999999999)
                 ]
             ]
         ];
@@ -259,6 +260,34 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'sender.phone.areaCode' => [ 'The sender.phone.area code must be a valid Brazil area code.' ]
+        ]);
+    }
+
+    public function testPayWithoutSedingSenderPhoneNumberExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.phone.number' => [ 'The sender.phone.number field is required.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidSenderPhoneNumberExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'sender' => [
+                'phone' => [
+                    'number' => $faker->numberBetween(10000000000)
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.phone.number' => [ 'The sender.phone.number must be between 8 and 9 digits.' ]
         ]);
     }
 
