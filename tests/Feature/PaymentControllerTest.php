@@ -22,7 +22,8 @@ class PaymentControllerTest extends TestCase
                 'phone' => [
                     'areaCode' => $faker->areaCode(),
                     'number' => $faker->numberBetween(10000000, 999999999)
-                ]
+                ],
+                'email' => $faker->email
             ]
         ];
 
@@ -290,5 +291,30 @@ class PaymentControllerTest extends TestCase
             'sender.phone.number' => [ 'The sender.phone.number must be between 8 and 9 digits.' ]
         ]);
     }
+    
+    public function testPayWithoutSedingSenderEmailExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.email' => [ 'The sender.email field is required.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidSenderEmailExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
 
+        $data = [
+            'sender' => [
+                'email' => $faker->text()
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.email' => [ 'The sender.email must be a valid email address.' ]
+        ]);
+    }
 }
