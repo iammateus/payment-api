@@ -247,12 +247,10 @@ class PaymentControllerTest extends TestCase
     {
         $faker = Faker::create('pt_BR');
 
-        $numberOfDigits = $faker->randomElement([ 1, 3 ]);
-
         $data = [
             'sender' => [
                 'phone' => [
-                    'areaCode' => $faker->randomNumber($numberOfDigits)
+                    'areaCode' => $faker->numberBetween(100)
                 ]
             ]
         ];
