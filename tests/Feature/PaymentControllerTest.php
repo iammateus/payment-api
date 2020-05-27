@@ -17,13 +17,17 @@ class PaymentControllerTest extends TestCase
                 'name' => $faker->name(),
                 'document' => [
                     'type' =>  $faker->randomElement( ['CPF'] ),
-                    'value' => $faker->cpf(false),
+                    'value' => $faker->cpf(false)
                 ],
                 'phone' => [
                     'areaCode' => $faker->areaCode(),
                     'number' => $faker->numberBetween(10000000, 999999999)
                 ],
                 'email' => $faker->email
+            ],
+            'shipping' => [
+                //@TODO: Improve validation in a way that some fields are required depending on this field
+                'addressRequired' => false
             ]
         ];
 
@@ -315,6 +319,40 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'sender.email' => [ 'The sender.email must be a valid email address.' ]
+        ]);
+    }
+    
+    public function testPayWithotSedingShippingDataExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping' => [ 'The shipping field is required.' ]
+        ]);
+    }
+    
+    public function testPayWithotSedingShippingAddressRequiredExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.addressRequired' => [ 'The shipping.address required field is required.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidShippingAddressRequiredExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'addressRequired' => $faker->text()
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->seeJson([
+            'shipping.addressRequired' => [ 'The shipping.address required field must be true or false.' ]
         ]);
     }
 }

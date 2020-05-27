@@ -30,6 +30,8 @@ class PaymentController extends Controller
             'sender.phone.areaCode' => 'required|area_code',
             'sender.phone.number' => 'required|digits_between:8,9',
             'sender.email' => 'required|email',
+            'shipping' => 'required',
+            'shipping.addressRequired' => 'required|boolean',
         ]);
 
         return response()->json();
