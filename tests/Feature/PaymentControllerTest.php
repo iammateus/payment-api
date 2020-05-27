@@ -29,7 +29,12 @@ class PaymentControllerTest extends TestCase
                 //@TODO: Improve validation in a way that some fields are required depending on this field
                 'addressRequired' => false
             ],
-            'extraAmount' => 0
+            'extraAmount' => 0,
+            'items' => [
+                [
+                    'id' => $faker->text()
+                ]
+            ]
         ];
 
         $this->post('/payment', $data);
@@ -376,6 +381,46 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->seeJson([
             'extraAmount' => [ 'The extra amount must be a number.' ]
+        ]);
+    }
+
+    public function testPayWithoutSendingItemsExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->seeJson([
+            'items' => [ 'The items field is required.' ]
+        ]);
+    }
+    
+    public function testPaySendingInvalidItemsExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => $faker->text()
+        ];
+
+        $this->post('/payment', $data);
+        $this->seeJson([
+            'items' => [ 'The items must be an array.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSendingItemIdExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => [
+                [
+
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->seeJson([
+            'items.0.id' => [ 'The items.0.id field is required.' ]
         ]);
     }
 }
