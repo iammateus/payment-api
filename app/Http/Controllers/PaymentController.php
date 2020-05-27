@@ -32,6 +32,7 @@ class PaymentController extends Controller
             'sender.email' => 'required|email',
             'shipping' => 'required',
             'shipping.addressRequired' => 'required|boolean',
+            'extraAmount' => 'required|numeric'
         ]);
 
         return response()->json();

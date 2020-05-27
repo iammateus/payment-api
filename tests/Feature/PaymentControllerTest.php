@@ -28,7 +28,8 @@ class PaymentControllerTest extends TestCase
             'shipping' => [
                 //@TODO: Improve validation in a way that some fields are required depending on this field
                 'addressRequired' => false
-            ]
+            ],
+            'extraAmount' => 0
         ];
 
         $this->post('/payment', $data);
@@ -353,6 +354,28 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->seeJson([
             'shipping.addressRequired' => [ 'The shipping.address required field must be true or false.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSedingExtraAmountExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->seeJson([
+            'extraAmount' => [ 'The extra amount field is required.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidExtraAmountExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+        
+        $data = [
+            'extraAmount' => $faker->text()
+        ];
+
+        $this->post('/payment', $data);
+        $this->seeJson([
+            'extraAmount' => [ 'The extra amount must be a number.' ]
         ]);
     }
 }
