@@ -35,6 +35,8 @@ class PaymentController extends Controller
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required',
+            'items.*.description' => 'required',
+            'items.*.quantity' => 'required|integer|min:1'
         ]);
 
         return response()->json();

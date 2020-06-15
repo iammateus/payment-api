@@ -32,7 +32,9 @@ class PaymentControllerTest extends TestCase
             'extraAmount' => 0,
             'items' => [
                 [
-                    'id' => $faker->text()
+                    'id' => $faker->text(),
+                    'description' => $faker->text(),
+                    'quantity' => $faker->numberBetween(1)
                 ]
             ]
         ];
@@ -357,6 +359,7 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'shipping.addressRequired' => [ 'The shipping.address required field must be true or false.' ]
         ]);
@@ -365,6 +368,7 @@ class PaymentControllerTest extends TestCase
     public function testPayWithoutSedingExtraAmountExpectingUnprocessableEntity()
     {
         $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'extraAmount' => [ 'The extra amount field is required.' ]
         ]);
@@ -379,6 +383,7 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'extraAmount' => [ 'The extra amount must be a number.' ]
         ]);
@@ -387,6 +392,7 @@ class PaymentControllerTest extends TestCase
     public function testPayWithoutSendingItemsExpectingUnprocessableEntity()
     {
         $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items' => [ 'The items field is required.' ]
         ]);
@@ -401,6 +407,7 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items' => [ 'The items must be an array.' ]
         ]);
@@ -408,8 +415,6 @@ class PaymentControllerTest extends TestCase
     
     public function testPayWithoutSendingItemIdExpectingUnprocessableEntity()
     {
-        $faker = Faker::create('pt_BR');
-
         $data = [
             'items' => [
                 [
@@ -419,8 +424,79 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items.0.id' => [ 'The items.0.id field is required.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSendingItemDescriptionExpectingUnprocessableEntity()
+    {
+        $data = [
+            'items' => [
+                [
+
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.description' => [ 'The items.0.description field is required.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSendingItemQuantityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'items' => [
+                [
+
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.quantity' => [ 'The items.0.quantity field is required.' ]
+        ]);
+    }
+    
+    public function testPaySendingInvalidFormatItemQuantityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => [
+                [
+                    'quantity' => $faker->text()
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.quantity' => [ 'The items.0.quantity must be an integer.' ]
+        ]);
+    }
+
+    public function testPaySendingItemQuantityZeroExpectingUnprocessableEntity()
+    {
+        $data = [
+            'items' => [
+                [
+                    'quantity' => 0
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.quantity' => [ 'The items.0.quantity must be at least 1.' ]
         ]);
     }
 }
