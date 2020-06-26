@@ -11,4 +11,9 @@ class EnvironmentTest extends TestCase
     {
         $this->assertNotEmpty(env('PAGSEGURO_TOKEN'));
     }
+    
+    public function testPagseguroUrlEnvironmentVariableIsSet()
+    {
+        $this->assertNotEmpty(env('PAGSEGURO_URL'));
+    }
 }
