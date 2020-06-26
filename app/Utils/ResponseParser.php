@@ -13,8 +13,8 @@ class ResponseParser {
      * @param ResponseInterface $response
      * @return object
      */
-    public static function parseXml(ResponseInterface $response): object
+    public static function parseXml( ResponseInterface $response ): object
     {
-        return new SimpleXMLElement($response->getBody()->getContents());
+        return new SimpleXMLElement( $response->getBody()->getContents() );
     }
 }

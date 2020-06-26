@@ -10,7 +10,7 @@ class SessionController extends Controller
 {
     private SessionService $sessionService;
 
-    public function __construct(SessionService $sessionService)
+    public function __construct ( SessionService $sessionService )
     {
         $this->sessionService = $sessionService;
     }
