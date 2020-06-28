@@ -23,3 +23,6 @@ A list of required environment variables that you need to set in the .env file:
 | PAGSEGURO_TOKEN | [Credentials Token](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) | 
 | PAGSEGURO_URL | [Pagseguro URL](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#transparente-ambientes-disponiveis) | 
 | PAGSEGURO_NOTIFICATION_URL | URL for [notifications from Pagseguro](https://m.pagseguro.uol.com.br/v2/guia-de-integracao/api-de-notificacoes.html?_rnt=dd#!rmcl) |
+
+## License
+[Apache License 2.0](https://github.com/iammateus/payment-api/blob/master/LICENSE)
