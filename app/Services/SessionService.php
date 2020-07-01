@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Utils\ResponseParser;
+use App\Helpers\ResponseParser;
 use GuzzleHttp\Client;
 
 class SessionService extends Controller
