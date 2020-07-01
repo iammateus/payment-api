@@ -1,6 +1,6 @@
 <?php
 
-use App\Utils\ResponseParser;
+use App\Helpers\ResponseParser;
 use Faker\Factory as Faker;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;

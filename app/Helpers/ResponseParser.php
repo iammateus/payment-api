@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils;
+namespace App\Helpers;
 
 use SimpleXMLElement;
 use Psr\Http\Message\ResponseInterface;
