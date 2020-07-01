@@ -36,7 +36,8 @@ class PaymentController extends Controller
             'items' => 'required|array',
             'items.*.id' => 'required',
             'items.*.description' => 'required',
-            'items.*.quantity' => 'required|integer|min:1'
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.amount' => 'required|numeric'
         ]);
 
         return response()->json();
