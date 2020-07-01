@@ -34,7 +34,8 @@ class PaymentControllerTest extends TestCase
                 [
                     'id' => $faker->text(),
                     'description' => $faker->text(),
-                    'quantity' => $faker->numberBetween(1)
+                    'quantity' => $faker->numberBetween(1),
+                    'amount' => $faker->randomFloat()
                 ]
             ]
         ];
@@ -497,6 +498,41 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items.0.quantity' => [ 'The items.0.quantity must be at least 1.' ]
+        ]);
+    }
+    
+    public function testPayWithoutSendingItemAmountExpectingUnprocessableEntity()
+    {
+        $data = [
+            'items' => [
+                [
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.amount' => [ 'The items.0.amount field is required.' ]
+        ]);
+    }
+   
+    public function testPaySendingInvalidItemAmountExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => [
+                [
+                    'amount' => $faker->text()
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.amount' => [ 'The items.0.amount must be a number.' ]
         ]);
     }
 }
