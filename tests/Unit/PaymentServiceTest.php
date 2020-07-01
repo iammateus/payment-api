@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\ItemList;
 use Faker\Factory as Faker;
 use App\Http\Controllers\PaymentService;
 
@@ -17,20 +18,23 @@ class PaymentServiceTest extends TestCase
     {
 		$faker = Faker::create();
 
-		$item = [
-			'id' => $faker->text(),
-			'description' => $faker->text(),
-			'quantity' => $faker->numberBetween(1)
-		];
+		// $item = [
+		// 	'id' => $faker->text(),
+		// 	'description' => $faker->text(),
+		// 	'quantity' => $faker->numberBetween(1)
+		// ];
 
-		$items = [ $item ];
+		// $items = [ $item ];
+
+		$items = new ItemList();
+
 		$parsed = $this->paymentService->parseItems($items);
 		$this->assertIsArray($parsed);
     }
 
 	public function testParseItemsWithEmptyArrayArgumentExpectingEmptyArray()
     {
-		$items = [];
+		$items = new ItemList();
 		$parsed = $this->paymentService->parseItems($items);
 		$this->assertIsArray($parsed);
 		$this->assertEmpty($parsed);
