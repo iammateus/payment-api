@@ -11,10 +11,14 @@ class ItemTest extends TestCase
 
 		$id = $faker->numberBetween(1);
 		$description = $faker->text();
+		$quantity = $faker->numberBetween(1);
+		$amount = $faker->randomFloat();
 		
-		$item = new Item($id, $description);
+		$item = new Item($id, $description, $quantity, $amount);
+		
 		$this->assertNotNull($item->id);
-		
 		$this->assertNotNull($item->description);
+		$this->assertNotNull($item->quantity);
+		$this->assertNotNull($item->amount);
 	}
 }
