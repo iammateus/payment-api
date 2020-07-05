@@ -15,6 +15,7 @@ class ItemTest extends TestCase
 		$amount = $faker->randomFloat();
 		
 		$item = new Item($id, $description, $quantity, $amount);
+		$this->assertInstanceOf(Item::class, $item);
 		
 		$this->assertNotNull($item->id);
 		$this->assertNotNull($item->description);
