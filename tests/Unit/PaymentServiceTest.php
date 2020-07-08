@@ -1,11 +1,14 @@
 <?php
 
 use App\Classes\ItemList;
+use App\Helpers\ItemCreatorTrait;
 use Faker\Factory as Faker;
 use App\Http\Controllers\PaymentService;
 
 class PaymentServiceTest extends TestCase
 {
+	use ItemCreatorTrait;
+
 	private PaymentService $paymentService;
 
 	public function setUp(): void
@@ -16,17 +19,11 @@ class PaymentServiceTest extends TestCase
 	
     public function testParseItems()
     {
-		$faker = Faker::create();
+		$item = $this->createItem();
 
-		// $item = [
-		// 	'id' => $faker->text(),
-		// 	'description' => $faker->text(),
-		// 	'quantity' => $faker->numberBetween(1)
-		// ];
+		$list = [ $item ];
 
-		// $items = [ $item ];
-
-		$items = new ItemList();
+		$items = new ItemList( $list );
 
 		$parsed = $this->paymentService->parseItems($items);
 		$this->assertIsArray($parsed);
