@@ -1,20 +1,16 @@
 <?php
 
-use Faker\Factory as Faker;
 use App\Classes\Item;
+use App\Helpers\ItemCreatorTrait;
 
 class ItemTest extends TestCase 
 {
+	use ItemCreatorTrait;
+	
 	public function testItemContructorWithAllParams()
 	{
-		$faker = Faker::create();
+		$item = $this->createItem();
 
-		$id = $faker->numberBetween(1);
-		$description = $faker->text();
-		$quantity = $faker->numberBetween(1);
-		$amount = $faker->randomFloat();
-		
-		$item = new Item($id, $description, $quantity, $amount);
 		$this->assertInstanceOf(Item::class, $item);
 		
 		$this->assertNotNull($item->id);

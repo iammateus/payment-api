@@ -1,11 +1,13 @@
 <?php
 
-use Faker\Factory as Faker;
 use App\Classes\Item;
 use App\Classes\ItemList;
+use App\Helpers\ItemCreatorTrait;
 
 class ItemListTest extends TestCase 
 {
+	use ItemCreatorTrait;
+
 	public function testItemContructor()
 	{
 		$items = new ItemList();
@@ -14,17 +16,10 @@ class ItemListTest extends TestCase
 	
 	public function testItemContructorWithAllParams()
 	{
-		$faker = Faker::create();
+		$item = $this->createItem();;
+		$list = [ $item ];
 
-		$id = $faker->numberBetween(1);
-		$description = $faker->text();
-		$quantity = $faker->numberBetween(1);
-		$amount = $faker->randomFloat();
-
-		$itemParam = new Item( $id, $description, $quantity, $amount );
-		$param = [ $itemParam ];
-
-		$items = new ItemList( $param );
+		$items = new ItemList( $list );
 		$this->assertInstanceOf(ItemList::class, $items);
 
 		$content = $items->getContent();
