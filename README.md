@@ -1,7 +1,7 @@
 # Payment API
 An example of payment API integrating with API Checkout Transparente by Pagseguro.
 
-This project was created for learning propose and I am refactoring it for better testing and cleaner code.
+This project was created for learning purposes and I am refactoring it for better testing and cleaner code.
 
 Currently, the working version is in the branch [feature/pagseguro-integration](https://github.com/iammateus/payment-api/tree/feature/pagseguro-integration) where it accepts all the three payment options ( Boleto, Credit Card, and Online Debit).
 
