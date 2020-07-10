@@ -27,6 +27,22 @@ class PaymentServiceTest extends TestCase
 
 		$parsed = $this->paymentService->parseItems($items);
 		$this->assertIsArray($parsed);
+
+		$parsedId = $parsed['itemId1'];
+		$this->assertNotEmpty($parsedId);
+		$this->assertEquals($item->id, $parsedId);
+		
+		$parsedDescription = $parsed['itemDescription1'];
+		$this->assertNotEmpty($parsedDescription);
+		$this->assertEquals($item->description, $parsedDescription);
+		
+		$parsedQuantity = $parsed['itemQuantity1'];
+		$this->assertNotEmpty($parsedQuantity);
+		$this->assertEquals($item->quantity, $parsedQuantity);
+		
+		$parsedAmount = $parsed['itemAmount1'];
+		$this->assertNotEmpty($parsedAmount);
+		$this->assertEquals($item->amount, $parsedAmount);
     }
 
 	public function testParseItemsWithEmptyArrayArgumentExpectingEmptyArray()
