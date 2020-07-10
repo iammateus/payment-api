@@ -9,7 +9,7 @@ class PaymentController extends Controller
 {
     public function store ( Request $request ): JsonResponse
     {
-        $this->validate($request, [
+        $rules = [
             'method' => 'required|in:BOLETO',
             'sender' => 'required',
             'sender.name' => 'required|string|min_words:2',
@@ -20,6 +20,7 @@ class PaymentController extends Controller
             'sender.phone.areaCode' => 'required|area_code',
             'sender.phone.number' => 'required|digits_between:8,9',
             'sender.email' => 'required|email',
+            'sender.hash' => 'required',
             'shipping' => 'required',
             'shipping.addressRequired' => 'required|boolean',
             'extraAmount' => 'required|numeric',
@@ -27,8 +28,10 @@ class PaymentController extends Controller
             'items.*.id' => 'required',
             'items.*.description' => 'required',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.amount' => 'required|numeric'
-        ]);
+            'items.*.amount' => 'required|numeric',
+        ];
+
+        $this->validate($request, $rules);
 
         return response()->json();
     } 

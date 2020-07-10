@@ -23,7 +23,8 @@ class PaymentControllerTest extends TestCase
                     'areaCode' => $faker->areaCode(),
                     'number' => $faker->numberBetween(10000000, 999999999)
                 ],
-                'email' => $faker->email
+                'email' => $faker->email,
+                'hash' => $faker->word()
             ],
             'shipping' => [
                 //@TODO: Improve validation in a way that some fields are required depending on this field
@@ -533,6 +534,15 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items.0.amount' => [ 'The items.0.amount must be a number.' ]
+        ]);
+    }
+
+    public function testPayWithoutSendSenderHashExpectingUnprocessableEntity()
+    {
+        $this->post('/payment');
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'sender.hash' => [ 'The sender.hash field is required.' ]
         ]);
     }
 }
