@@ -6,6 +6,10 @@ use App\Classes\ItemList;
 
 class PaymentService extends Controller
 {
+    public function parseDefaultPaymentParams () {
+        //TODO: create this function
+    }
+
     public function parseItems (ItemList $items): array
     {
         $list = $items->getContent();
