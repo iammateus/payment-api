@@ -5,7 +5,7 @@ use App\Helpers\ItemCreatorTrait;
 use Faker\Factory as Faker;
 use App\Http\Controllers\PaymentService;
 
-class PaymentServiceTest extends TestCase
+class ParseItemsTest extends TestCase
 {
 	use ItemCreatorTrait;
 
