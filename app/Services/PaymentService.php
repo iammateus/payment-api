@@ -20,6 +20,7 @@ class PaymentService extends Controller
             'notificationURL' => $options['notificationURL'],
             'senderName' => $options['sender']['name'],
             'senderCPF' => $options['sender']['document']['value'],
+            'senderAreaCode' => $options['sender']['phone']['areaCode'],
         ];
         
         return $parsed;

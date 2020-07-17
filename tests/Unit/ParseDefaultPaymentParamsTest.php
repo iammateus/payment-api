@@ -28,6 +28,9 @@ class ParseDefaultPaymentParamsTest extends TestCase
 				'name' => $faker->name(),
 				'document' => [
 					'value' => $faker->cpf(false)
+				],
+				'phone'=> [
+					'areaCode' => $faker->areaCode()
 				]
 			]
 		];
@@ -90,5 +93,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['senderCPF']);
 		$this->assertEquals($options['sender']['document']['value'], $parsed['senderCPF']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingSenderAreaCode()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['senderAreaCode']);
+		$this->assertEquals($options['sender']['phone']['areaCode'], $parsed['senderAreaCode']);
 	}
 }
