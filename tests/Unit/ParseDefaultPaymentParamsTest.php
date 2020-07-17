@@ -12,11 +12,19 @@ class ParseDefaultPaymentParamsTest extends TestCase
         $this->paymentService = app(PaymentService::class);
 	}
 
-	public function testParseDefaultPaymentParamsTest()
+	/**
+	 * Fake a valid options array to be parsed
+	 */ 
+	public function fakeOptions()
 	{
-		$options = [
+		return [
 			'mode' => 'default'
 		];
+	}
+
+	public function testParseDefaultPaymentParamsTest()
+	{
+		$options = $this->fakeOptions();
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsArray($parsed);
 	}
@@ -30,9 +38,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 
 	public function testParseDefaultPaymentParamsParsingPaymentMode()
 	{
-		$options = [
-			'mode' => 'default'
-		];
+		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['paymentMode']);
