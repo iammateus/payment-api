@@ -56,8 +56,8 @@ class ParseItemsTest extends TestCase
 	public function testParseItemsWithNotArrayArgumentExpectingError()
     {
 		$this->expectException(TypeError::class);
-		$invalidParams = 'A invalid params';
-		$parsed = $this->paymentService->parseItems($invalidParams);
+		$invalidParam = 'A invalid param';
+		$parsed = $this->paymentService->parseItems($invalidParam);
 	}
 	
 	public function testParseItemsWithoutArgumentExpectingError()

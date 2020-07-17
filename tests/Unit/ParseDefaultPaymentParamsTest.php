@@ -11,10 +11,21 @@ class ParseDefaultPaymentParamsTest extends TestCase
         parent::setUp();
         $this->paymentService = app(PaymentService::class);
 	}
-	
+
 	public function testParseDefaultPaymentParamsTest()
 	{
-		$this->paymentService->parseDefaultPaymentParams();
-		//TODO: create this test
+		$options = [
+
+		];
+
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsArray($parsed);
+	}
+
+	public function testParseDefaultPaymentParamsSendingInvalidArgumentTest()
+	{
+		$this->expectException(TypeError::class);
+		$invalidParam = 'A invalid param';
+		$this->paymentService->parseDefaultPaymentParams($invalidParam);
 	}
 }
