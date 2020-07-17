@@ -19,7 +19,8 @@ class ParseDefaultPaymentParamsTest extends TestCase
 	{
 		return [
 			'mode' => 'default',
-			'currency' => 'BRL'
+			'currency' => 'BRL',
+			'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL")
 		];
 	}
 
@@ -53,5 +54,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['currency']);
 		$this->assertEquals($options['currency'], $parsed['currency']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingNotificationURL()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['notificationURL']);
+		$this->assertEquals($options['notificationURL'], $parsed['notificationURL']);
 	}
 }

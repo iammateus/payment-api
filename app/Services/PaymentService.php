@@ -9,7 +9,8 @@ class PaymentService extends Controller
     public function parseDefaultPaymentParams (array $options) {
         return [
             'paymentMode' => $options['mode'],
-            'currency' => $options['currency']
+            'currency' => $options['currency'],
+            'notificationURL' => $options['notificationURL']
         ];
     }
 
