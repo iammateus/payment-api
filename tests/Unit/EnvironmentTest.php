@@ -16,4 +16,9 @@ class EnvironmentTest extends TestCase
     {
         $this->assertNotEmpty(env('PAGSEGURO_URL'));
     }
+    
+    public function testPagseguroNotificationUrlEnvironmentVariableIsSet()
+    {
+        $this->assertNotEmpty(env('PAGSEGURO_NOTIFICATION_URL'));
+    }
 }
