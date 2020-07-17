@@ -15,9 +15,8 @@ class ParseDefaultPaymentParamsTest extends TestCase
 	public function testParseDefaultPaymentParamsTest()
 	{
 		$options = [
-
+			'mode' => 'default'
 		];
-
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsArray($parsed);
 	}
@@ -27,5 +26,16 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->expectException(TypeError::class);
 		$invalidParam = 'A invalid param';
 		$this->paymentService->parseDefaultPaymentParams($invalidParam);
+	}
+
+	public function testParseDefaultPaymentParamsParsingPaymentMode()
+	{
+		$options = [
+			'mode' => 'default'
+		];
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['paymentMode']);
+		$this->assertEquals($options['mode'], $parsed['paymentMode']);
 	}
 }

@@ -7,7 +7,9 @@ use App\Classes\ItemList;
 class PaymentService extends Controller
 {
     public function parseDefaultPaymentParams (array $options) {
-        return [];
+        return [
+            'paymentMode' => $options['mode']
+        ];
     }
 
     public function parseItems (ItemList $items): array
