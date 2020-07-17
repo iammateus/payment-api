@@ -10,7 +10,8 @@ class PaymentService extends Controller
         return [
             'paymentMode' => $options['mode'],
             'currency' => $options['currency'],
-            'notificationURL' => $options['notificationURL']
+            'notificationURL' => $options['notificationURL'],
+            'senderName' => $options['sender']['name'],
         ];
     }
 

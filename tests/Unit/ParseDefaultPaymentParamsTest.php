@@ -1,5 +1,6 @@
 <?php
 
+use Faker\Factory as Faker;
 use App\Http\Controllers\PaymentService;
 
 class ParseDefaultPaymentParamsTest extends TestCase 
@@ -17,10 +18,15 @@ class ParseDefaultPaymentParamsTest extends TestCase
 	 */ 
 	public function fakeOptions()
 	{
+		$faker = Faker::create();
+
 		return [
 			'mode' => 'default',
 			'currency' => 'BRL',
-			'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL")
+			'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL"),
+			'sender' => [
+				'name' => $faker->name()
+			]
 		];
 	}
 
@@ -63,5 +69,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['notificationURL']);
 		$this->assertEquals($options['notificationURL'], $parsed['notificationURL']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingSenderName()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['senderName']);
+		$this->assertEquals($options['sender']['name'], $parsed['senderName']);
 	}
 }
