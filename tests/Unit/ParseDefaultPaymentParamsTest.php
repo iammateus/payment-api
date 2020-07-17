@@ -32,7 +32,8 @@ class ParseDefaultPaymentParamsTest extends TestCase
 				'phone'=> [
 					'areaCode' => $faker->areaCode(),
 					'number' => $faker->phoneNumber()
-				]
+				],
+				'email' => $faker->email
 			]
 		];
 	}
@@ -112,5 +113,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['senderPhone']);
 		$this->assertEquals($options['sender']['phone']['number'], $parsed['senderPhone']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingSenderEmail()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['senderEmail']);
+		$this->assertEquals($options['sender']['email'], $parsed['senderEmail']);
 	}
 }

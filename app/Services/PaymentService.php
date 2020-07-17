@@ -22,6 +22,7 @@ class PaymentService extends Controller
             'senderCPF' => $options['sender']['document']['value'],
             'senderAreaCode' => $options['sender']['phone']['areaCode'],
             'senderPhone' => $options['sender']['phone']['number'],
+            'senderEmail' => $options['sender']['email']
         ];
         
         return $parsed;
