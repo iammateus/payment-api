@@ -25,6 +25,7 @@ class PaymentService extends Controller
             'senderEmail' => $options['sender']['email'],
             'senderHash' => $options['sender']['hash'],
             'shippingAddressRequired' => $options['shipping']['addressRequired'],
+            'extraAmount' => $options['extraAmount'],
         ];
         
         return $parsed;

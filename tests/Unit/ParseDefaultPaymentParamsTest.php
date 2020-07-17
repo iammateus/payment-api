@@ -38,7 +38,8 @@ class ParseDefaultPaymentParamsTest extends TestCase
 			],
 			'shipping' => [
 				'addressRequired' => false
-			]
+			],
+			'extraAmount' => $faker->randomFloat()
 		];
 	}
 
@@ -144,5 +145,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertNotNull($parsed['shippingAddressRequired']);
 		$this->assertEquals($options['shipping']['addressRequired'], $parsed['shippingAddressRequired']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingSenderExtraAmount()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertNotNull($parsed['extraAmount']);
+		$this->assertEquals($options['extraAmount'], $parsed['extraAmount']);
 	}
 }
