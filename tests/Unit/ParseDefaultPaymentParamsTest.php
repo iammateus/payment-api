@@ -18,14 +18,17 @@ class ParseDefaultPaymentParamsTest extends TestCase
 	 */ 
 	public function fakeOptions()
 	{
-		$faker = Faker::create();
+		$faker = Faker::create('pt_BR');
 
 		return [
 			'mode' => 'default',
 			'currency' => 'BRL',
 			'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL"),
 			'sender' => [
-				'name' => $faker->name()
+				'name' => $faker->name(),
+				'document' => [
+					'value' => $faker->cpf(false)
+				]
 			]
 		];
 	}
@@ -62,7 +65,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->assertEquals($options['currency'], $parsed['currency']);
 	}
 	
-	public function testParseDefaultPaymentParamsParsingNotificationURL()
+	public function testParseDefaultPaymentParamsParsingNotificationUrl()
 	{
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
@@ -78,5 +81,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['senderName']);
 		$this->assertEquals($options['sender']['name'], $parsed['senderName']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingSenderCpf()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['senderCPF']);
+		$this->assertEquals($options['sender']['document']['value'], $parsed['senderCPF']);
 	}
 }

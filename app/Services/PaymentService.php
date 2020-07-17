@@ -12,6 +12,7 @@ class PaymentService extends Controller
             'currency' => $options['currency'],
             'notificationURL' => $options['notificationURL'],
             'senderName' => $options['sender']['name'],
+            'senderCPF' => $options['sender']['document']['value'],
         ];
     }
 
