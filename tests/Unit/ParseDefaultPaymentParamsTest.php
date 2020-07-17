@@ -18,7 +18,8 @@ class ParseDefaultPaymentParamsTest extends TestCase
 	public function fakeOptions()
 	{
 		return [
-			'mode' => 'default'
+			'mode' => 'default',
+			'currency' => 'BRL'
 		];
 	}
 
@@ -43,5 +44,14 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertIsString($parsed['paymentMode']);
 		$this->assertEquals($options['mode'], $parsed['paymentMode']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingCurrency()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertIsString($parsed['currency']);
+		$this->assertEquals($options['currency'], $parsed['currency']);
 	}
 }
