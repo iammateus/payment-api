@@ -35,6 +35,9 @@ class ParseDefaultPaymentParamsTest extends TestCase
 				],
 				'email' => $faker->email,
 				'hash' => $faker->word(),
+			],
+			'shipping' => [
+				'addressRequired' => false
 			]
 		];
 	}
@@ -58,7 +61,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['paymentMode']);
+		$this->assertNotNull($parsed['paymentMode']);
 		$this->assertEquals($options['mode'], $parsed['paymentMode']);
 	}
 	
@@ -67,7 +70,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['currency']);
+		$this->assertNotNull($parsed['currency']);
 		$this->assertEquals($options['currency'], $parsed['currency']);
 	}
 	
@@ -76,7 +79,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['notificationURL']);
+		$this->assertNotNull($parsed['notificationURL']);
 		$this->assertEquals($options['notificationURL'], $parsed['notificationURL']);
 	}
 	
@@ -85,7 +88,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['senderName']);
+		$this->assertNotNull($parsed['senderName']);
 		$this->assertEquals($options['sender']['name'], $parsed['senderName']);
 	}
 	
@@ -94,7 +97,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['senderCPF']);
+		$this->assertNotNull($parsed['senderCPF']);
 		$this->assertEquals($options['sender']['document']['value'], $parsed['senderCPF']);
 	}
 	
@@ -103,7 +106,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['senderAreaCode']);
+		$this->assertNotNull($parsed['senderAreaCode']);
 		$this->assertEquals($options['sender']['phone']['areaCode'], $parsed['senderAreaCode']);
 	}
 	
@@ -112,7 +115,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['senderPhone']);
+		$this->assertNotNull($parsed['senderPhone']);
 		$this->assertEquals($options['sender']['phone']['number'], $parsed['senderPhone']);
 	}
 	
@@ -121,7 +124,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['senderEmail']);
+		$this->assertNotNull($parsed['senderEmail']);
 		$this->assertEquals($options['sender']['email'], $parsed['senderEmail']);
 	}
 	
@@ -130,7 +133,16 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
-		$this->assertIsString($parsed['senderHash']);
+		$this->assertNotNull($parsed['senderHash']);
 		$this->assertEquals($options['sender']['hash'], $parsed['senderHash']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingSenderShippingAddressRequired()
+	{
+		$options = $this->fakeOptions();
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		$this->assertNotNull($parsed['shippingAddressRequired']);
+		$this->assertEquals($options['shipping']['addressRequired'], $parsed['shippingAddressRequired']);
 	}
 }
