@@ -46,4 +46,13 @@ class PaymentService extends Controller
 
         return $parsed;
     }
+
+    public function parseBoletoPaymentParams(): array
+    {
+        $parsed = [
+            'paymentMethod' => 'boleto',
+        ];
+
+        return $parsed;
+    }
 }
