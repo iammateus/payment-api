@@ -12,8 +12,8 @@ class PaymentService extends Controller
      * @param array $options Internal service formatted data
      * @return array Pagseguro formatted data
      */
-    public function parseDefaultPaymentParams (array $options) {
-        
+    public function parseDefaultPaymentParams (array $options) 
+    {
         $parsed = [
             'paymentMode' => $options['mode'],
             'currency' => $options['currency'],
