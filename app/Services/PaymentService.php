@@ -15,9 +15,9 @@ class PaymentService extends Controller
     public function parseDefaultPaymentParams (array $options) 
     {
         $parsed = [
-            'paymentMode' => $options['mode'],
-            'currency' => $options['currency'],
-            'notificationURL' => $options['notificationURL'],
+            'paymentMode' => 'default',
+            'currency' => 'BRL',
+            'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL"),
             'senderName' => $options['sender']['name'],
             'senderCPF' => $options['sender']['document']['value'],
             'senderAreaCode' => $options['sender']['phone']['areaCode'],

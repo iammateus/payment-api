@@ -21,9 +21,6 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$faker = Faker::create('pt_BR');
 
 		return [
-			'mode' => 'default',
-			'currency' => 'BRL',
-			'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL"),
 			'sender' => [
 				'name' => $faker->name(),
 				'document' => [
@@ -63,7 +60,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertNotNull($parsed['paymentMode']);
-		$this->assertEquals($options['mode'], $parsed['paymentMode']);
+		$this->assertEquals('default', $parsed['paymentMode']);
 	}
 	
 	public function testParseDefaultPaymentParamsParsingCurrency()
@@ -72,7 +69,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertNotNull($parsed['currency']);
-		$this->assertEquals($options['currency'], $parsed['currency']);
+		$this->assertEquals('BRL', $parsed['currency']);
 	}
 	
 	public function testParseDefaultPaymentParamsParsingNotificationUrl()
@@ -81,7 +78,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertNotNull($parsed['notificationURL']);
-		$this->assertEquals($options['notificationURL'], $parsed['notificationURL']);
+		$this->assertEquals(env("PAGSEGURO_NOTIFICATION_URL"), $parsed['notificationURL']);
 	}
 	
 	public function testParseDefaultPaymentParamsParsingSenderName()
