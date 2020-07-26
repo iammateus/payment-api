@@ -3,20 +3,18 @@
 namespace App\Helpers;
 use Faker\Factory as Faker;
 
-use App\Classes\Item;
-
 trait ItemCreatorTrait
 {
-	public function createItem(): Item
+	public function createItem(): array
 	{
 		$faker = Faker::create();
 
-		$id = $faker->numberBetween(1);
-		$description = $faker->text();
-		$quantity = $faker->numberBetween(1);
-		$amount = $faker->randomFloat();
-		
-		$item = new Item($id, $description, $quantity, $amount);
+		$item = [
+			'id' => $faker->numberBetween(1),
+			'description' => $faker->text(),
+			'quantity' => $faker->numberBetween(1),
+			'amount' => $faker->randomFloat()
+		];
 
 		return $item;
 	}
