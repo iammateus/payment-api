@@ -33,6 +33,7 @@ class PaymentControllerTest extends TestCase
             'extraAmount' => 0,
             'items' => [
                 [
+                    // @TODO: Add tests to these rule (35, 100, 10, 100)
                     'id' => $faker->text(36),
                     'description' => $faker->text(100),
                     'quantity' => $faker->numberBetween(1, 10),
