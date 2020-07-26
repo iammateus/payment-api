@@ -1,6 +1,5 @@
 <?php
 
-use App\Classes\ItemList;
 use App\Helpers\ItemCreatorTrait;
 use Faker\Factory as Faker;
 use App\Http\Controllers\PaymentService;
@@ -21,34 +20,33 @@ class ParseItemsTest extends TestCase
     {
 		$item = $this->createItem();
 
-		$list = [ $item ];
-
-		$items = new ItemList( $list );
+		$items = [ $item ];
 
 		$parsed = $this->paymentService->parseItems($items);
 		$this->assertIsArray($parsed);
 
 		$parsedId = $parsed['itemId1'];
 		$this->assertNotEmpty($parsedId);
-		$this->assertEquals($item->id, $parsedId);
+		$this->assertEquals($item['id'], $parsedId);
 		
 		$parsedDescription = $parsed['itemDescription1'];
 		$this->assertNotEmpty($parsedDescription);
-		$this->assertEquals($item->description, $parsedDescription);
+		$this->assertEquals($item['description'], $parsedDescription);
 		
 		$parsedQuantity = $parsed['itemQuantity1'];
 		$this->assertNotEmpty($parsedQuantity);
-		$this->assertEquals($item->quantity, $parsedQuantity);
+		$this->assertEquals($item['quantity'], $parsedQuantity);
 		
 		$parsedAmount = $parsed['itemAmount1'];
 		$this->assertNotEmpty($parsedAmount);
-		$this->assertEquals($item->amount, $parsedAmount);
+
+		$intendedAmount = number_format($item['amount'], 2, '.', '');
+		$this->assertEquals($intendedAmount, $parsedAmount);
     }
 
 	public function testParseItemsWithEmptyArrayArgumentExpectingEmptyArray()
     {
-		$items = new ItemList();
-		$parsed = $this->paymentService->parseItems($items);
+		$parsed = $this->paymentService->parseItems([]);
 		$this->assertIsArray($parsed);
 		$this->assertEmpty($parsed);
     }

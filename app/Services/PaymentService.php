@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Item;
 use GuzzleHttp\Client;
-use App\Classes\ItemList;
 use App\Helpers\ResponseParser;
 
 class PaymentService extends Controller
@@ -25,15 +23,7 @@ class PaymentService extends Controller
 
         $defaultParams = $this->parseDefaultPaymentParams($options);
         
-        $items = [];
-
-        foreach ($options['items'] as $item){
-            $items[] = new Item($item['id'], $item['description'], $item['quantity'], $item['amount']);
-        }
-
-        $items = new ItemList($items);
-
-        $itemsParams = $this->parseItems($items);
+        $itemsParams = $this->parseItems($options['items']);
         
         $params = array_merge( $defaultParams, $itemsParams, $methodParams );
 
@@ -77,17 +67,16 @@ class PaymentService extends Controller
         return $parsed;
     }
 
-    public function parseItems (ItemList $items): array
+    public function parseItems (array $list): array
     {
-        $list = $items->getContent();
         $parsed = [];
 
         foreach ($list as $key => $item) {
             $parsedKey = $key + 1;
-            $parsed['itemId' . $parsedKey] = $item->id;
-            $parsed['itemDescription' . $parsedKey] = $item->description;
-            $parsed['itemQuantity' . $parsedKey] = $item->quantity;
-            $parsed['itemAmount' . $parsedKey] = number_format($item->amount, 2, '.', '');
+            $parsed['itemId' . $parsedKey] = $item['id'];
+            $parsed['itemDescription' . $parsedKey] = $item['description'];
+            $parsed['itemQuantity' . $parsedKey] = $item['quantity'];
+            $parsed['itemAmount' . $parsedKey] = number_format($item['amount'], 2, '.', '');
         }
 
         return $parsed;

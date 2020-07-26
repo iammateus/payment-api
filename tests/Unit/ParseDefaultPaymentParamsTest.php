@@ -149,7 +149,10 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$options = $this->fakeOptions();
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
 		$this->assertNotNull($parsed['extraAmount']);
-		$this->assertEquals($options['extraAmount'], $parsed['extraAmount']);
+
+		$intendedExtraAmount = number_format($options['extraAmount'], 2, '.', '');
+		$this->assertEquals($intendedExtraAmount, $parsed['extraAmount']);
 	}
 }
