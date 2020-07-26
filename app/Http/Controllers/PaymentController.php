@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\PaymentService;
 
 class PaymentController extends Controller
 {
+    private PaymentService $paymentService;
+
+    public function __construct ( PaymentService $paymentService )
+    {
+        $this->paymentService = $paymentService;
+    }
+
     public function store ( Request $request ): JsonResponse
     {
         $rules = [
@@ -32,6 +40,8 @@ class PaymentController extends Controller
         ];
 
         $this->validate($request, $rules);
+
+        $pay = $this->paymentService->pay($request->all());
 
         return response()->json();
     } 

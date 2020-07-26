@@ -33,10 +33,10 @@ class PaymentControllerTest extends TestCase
             'extraAmount' => 0,
             'items' => [
                 [
-                    'id' => $faker->text(),
-                    'description' => $faker->text(),
-                    'quantity' => $faker->numberBetween(1),
-                    'amount' => $faker->randomFloat()
+                    'id' => $faker->text(36),
+                    'description' => $faker->text(100),
+                    'quantity' => $faker->numberBetween(1, 10),
+                    'amount' => $faker->randomFloat(10000)
                 ]
             ]
         ];
