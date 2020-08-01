@@ -33,7 +33,7 @@ class PaymentController extends Controller
             'shipping.addressRequired' => 'required|boolean',
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
-            'items.*.id' => 'required',
+            'items.*.id' => 'required|max:36',
             'items.*.description' => 'required',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.amount' => 'required|numeric',

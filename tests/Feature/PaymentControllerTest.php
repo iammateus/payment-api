@@ -546,4 +546,23 @@ class PaymentControllerTest extends TestCase
             'sender.hash' => [ 'The sender.hash field is required.' ]
         ]);
     }
+
+    public function testSendingTooBigItemIdExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => [
+                [
+                    'id' => $faker->text() // Creates a string with a length bigger than 36
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.id' => [ 'The items.0.id may not be greater than 36 characters.' ]
+        ]);
+    }
 }
