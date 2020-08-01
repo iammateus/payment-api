@@ -36,7 +36,7 @@ class PaymentController extends Controller
             'items.*.id' => 'required|max:36',
             'items.*.description' => 'required|max:110',
             'items.*.quantity' => 'required|integer|min:1|max:100',
-            'items.*.amount' => 'required|numeric',
+            'items.*.amount' => 'required|numeric|max:10000',
         ];
 
         $this->validate($request, $rules);

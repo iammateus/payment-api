@@ -37,7 +37,7 @@ class PaymentControllerTest extends TestCase
                     'id' => $faker->text(36),
                     'description' => $faker->text(110),
                     'quantity' => $faker->numberBetween(1, 100),
-                    'amount' => $faker->randomFloat(10000)
+                    'amount' => $faker->randomFloat(1, 10000)
                 ]
             ]
         ];
@@ -481,9 +481,8 @@ class PaymentControllerTest extends TestCase
 
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $this->seeJson([
-            'items.0.quantity' => [ 'The items.0.quantity must be an integer.' ]
-        ]);
+        $response = json_decode($this->response->getContent(), true);
+        $this->assertContains('The items.0.quantity must be an integer.', $response['items.0.quantity']);
     }
 
     public function testPaySendingItemQuantityZeroExpectingUnprocessableEntity()
@@ -601,6 +600,25 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items.0.quantity' => [ 'The items.0.quantity may not be greater than 100.' ]
+        ]);
+    }
+    
+    public function testSendingTooBigAmountQuantityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => [
+                [
+                    'amount' => $faker->numberBetween(10001) // Creates a string with a length bigger than 110
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.amount' => [ 'The items.0.amount may not be greater than 10000.' ]
         ]);
     }
 }
