@@ -35,8 +35,8 @@ class PaymentControllerTest extends TestCase
                 [
                     // @TODO: Add tests to these rule (35, 100, 10, 100)
                     'id' => $faker->text(36),
-                    'description' => $faker->text(100),
-                    'quantity' => $faker->numberBetween(1, 10),
+                    'description' => $faker->text(110),
+                    'quantity' => $faker->numberBetween(1, 100),
                     'amount' => $faker->randomFloat(10000)
                 ]
             ]
@@ -563,6 +563,25 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'items.0.id' => [ 'The items.0.id may not be greater than 36 characters.' ]
+        ]);
+    }
+    
+    public function testSendingTooBigItemDescriptionExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'items' => [
+                [
+                    'description' => $faker->text() // Creates a string with a length bigger than 36
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'items.0.description' => [ 'The items.0.description may not be greater than 110 characters.' ]
         ]);
     }
 }
