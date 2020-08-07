@@ -36,13 +36,14 @@ class PaymentControllerTest extends TestCase
                     'id' => $faker->text(36),
                     'description' => $faker->text(110),
                     'quantity' => $faker->numberBetween(1, 100),
-                    'amount' => $faker->randomFloat(1, 10000)
+                    'amount' => $faker->randomFloat(2,1, 10000)
                 ]
             ]
         ];
 
         $this->post('/payment', $data);
         $this->assertResponseOk();
+        var_dump($this->response->getContent());
     }
 
     public function testPayWithoutSendingPaymentMethodExpectingUnprocessableEntity()
@@ -552,7 +553,7 @@ class PaymentControllerTest extends TestCase
         $data = [
             'items' => [
                 [
-                    'id' => $faker->text() // Creates a string with a length bigger than 36
+                    'id' => $faker->text(1000) // Creates a string with a length bigger than 36
                 ]
             ]
         ];
@@ -571,7 +572,7 @@ class PaymentControllerTest extends TestCase
         $data = [
             'items' => [
                 [
-                    'description' => $faker->text() // Creates a string with a length bigger than 110
+                    'description' => $faker->text(1000) // Creates a string with a length bigger than 110
                 ]
             ]
         ];
