@@ -44,7 +44,10 @@ class PaymentController extends Controller
         $pay = $this->paymentService->pay($request->all());
 
         return response()->json([
-            'message' => 'SUCCESS'
+            'message' => 'SUCCESS',
+            'data' => [
+                'paymentLink' => (string) $pay->paymentLink
+            ]
         ]);
     } 
 }
