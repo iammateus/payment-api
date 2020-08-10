@@ -9,7 +9,7 @@ class PaymentService extends Controller
 {
     private Client $client;
 
-    public function __construct(Client $client = null)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }
@@ -27,7 +27,9 @@ class PaymentService extends Controller
         
         $params = array_merge( $defaultParams, $itemsParams, $methodParams );
 
-        $response = $this->client->request('POST', env('PAGSEGURO_URL') . 'transactions',
+        $link = env('PAGSEGURO_URL') . '/transactions';
+
+        $response = $this->client->request('POST', $link,
             [
                 'form_params' => $params,
                 'query' => [

@@ -41,12 +41,12 @@ class PaymentController extends Controller
 
         $this->validate($request, $rules);
 
-        $pay = $this->paymentService->pay($request->all());
+        $payment = $this->paymentService->pay($request->all());
 
         return response()->json([
             'message' => 'SUCCESS',
             'data' => [
-                'paymentLink' => (string) $pay->paymentLink
+                'paymentLink' => (string) $payment->paymentLink
             ]
         ]);
     } 

@@ -9,9 +9,9 @@ class SessionService extends Controller
 {
     private Client $client;
     
-    public function __construct ()
+    public function __construct (Client $client)
     {
-        $this->client = new Client( [ 'base_uri' => env('PAGSEGURO_URL') ] );
+        $this->client = $client;
     }
 
     public function store (): object
@@ -19,7 +19,9 @@ class SessionService extends Controller
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
 
-        $response = $this->client->request('POST', 'sessions', [
+        $link = env('PAGSEGURO_URL') . '/sessions';
+
+        $response = $this->client->request('POST', $link, [
             'query' => [
                 'email' => $email,
                 'token' => $token
