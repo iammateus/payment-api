@@ -23,7 +23,7 @@ class SessionController extends Controller
     {
         $session = $this->sessionService->store();
 
-        $token = (string) $session->id;
+        $token = $session['id'];
 
         return response()->json([
             'message' => 'SUCCESS',
