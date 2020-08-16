@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use App\Helpers\ResponseParser;
+use App\Helpers\SimpleXMLElementParser;
 
 class PaymentService extends Controller
 {
@@ -14,7 +15,7 @@ class PaymentService extends Controller
         $this->client = $client;
     }
 
-    public function pay(array $options): object
+    public function pay(array $options): array
     {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
@@ -40,6 +41,8 @@ class PaymentService extends Controller
         );
 
         $response = ResponseParser::parseXml($response);
+
+        $response = SimpleXMLElementParser::parseToArray($response);
 
         return $response;
     }

@@ -46,7 +46,7 @@ class PaymentController extends Controller
         return response()->json([
             'message' => 'SUCCESS',
             'data' => [
-                'paymentLink' => (string) $payment->paymentLink
+                'paymentLink' => $payment['paymentLink']
             ]
         ]);
     } 
