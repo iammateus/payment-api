@@ -2,6 +2,14 @@ version: "3.3"
 
 services:
 
+  bootstrap:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    command: ./.docker/bootstrap.sh
+
   api:
     build:
       context: .

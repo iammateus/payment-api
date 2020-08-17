@@ -3,5 +3,6 @@
 Homestead.json
 Homestead.yaml
 .env
+.env.backup
 .phpunit.result.cache
 storage/coverage
