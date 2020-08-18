@@ -700,7 +700,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySedingAddressRequiredAsTrueButNotSendingStreetExpectingUnprocessableEntity()
+    public function testPaySendingAddressRequiredAsTrueButNotSendingStreetExpectingUnprocessableEntity()
     {
         $data = [
             'shipping' => [
@@ -715,7 +715,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingTooBigStreetExpectingUnprocessableEntity()
+    public function testPaySendingTooBigStreetExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
