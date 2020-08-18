@@ -31,6 +31,7 @@ class PaymentController extends Controller
             'sender.hash' => 'required',
             'shipping' => 'required',
             'shipping.addressRequired' => 'required|boolean',
+            'shipping.street' => 'required_if:shipping.addressRequired,1|max:80',
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|max:36',
