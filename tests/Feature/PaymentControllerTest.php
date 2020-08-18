@@ -624,7 +624,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testSendingTooBigItemIdExpectingUnprocessableEntity()
+    public function testPaySendingTooBigItemIdExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -643,7 +643,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testSendingTooBigItemDescriptionExpectingUnprocessableEntity()
+    public function testPaySendingTooBigItemDescriptionExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -662,7 +662,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testSendingTooBigItemQuantityExpectingUnprocessableEntity()
+    public function testPaySendingTooBigItemQuantityExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -681,7 +681,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testSendingTooBigAmountQuantityExpectingUnprocessableEntity()
+    public function testPaySendingTooBigAmountQuantityExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
