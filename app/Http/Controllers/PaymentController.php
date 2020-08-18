@@ -34,7 +34,7 @@ class PaymentController extends Controller
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|max:36',
-            'items.*.description' => 'required|max:110',
+            'items.*.description' => 'required|max:100',
             'items.*.quantity' => 'required|integer|min:1|max:100',
             'items.*.amount' => 'required|numeric|max:10000',
         ];

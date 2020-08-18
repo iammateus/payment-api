@@ -107,7 +107,7 @@ class PaymentControllerTest extends TestCase
             'items' => [
                 [
                     'id' => $faker->text(36),
-                    'description' => $faker->text(110),
+                    'description' => $faker->text(100),
                     'quantity' => $faker->numberBetween(1, 100),
                     'amount' => $faker->randomFloat(2,1, 10000)
                 ]
@@ -658,7 +658,7 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'items.0.description' => [ 'The items.0.description may not be greater than 110 characters.' ]
+            'items.0.description' => [ 'The items.0.description may not be greater than 100 characters.' ]
         ]);
     }
     
