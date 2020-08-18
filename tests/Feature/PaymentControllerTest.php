@@ -650,7 +650,7 @@ class PaymentControllerTest extends TestCase
         $data = [
             'items' => [
                 [
-                    'description' => $faker->text(1000) // Creates a string with a length bigger than 110
+                    'description' => $faker->text(1000) // Creates a string with a length bigger than 100
                 ]
             ]
         ];
@@ -669,7 +669,7 @@ class PaymentControllerTest extends TestCase
         $data = [
             'items' => [
                 [
-                    'quantity' => $faker->numberBetween(101) // Creates a string with a length bigger than 110
+                    'quantity' => $faker->numberBetween(101) // Creates a string with a length bigger than 100
                 ]
             ]
         ];
@@ -688,7 +688,7 @@ class PaymentControllerTest extends TestCase
         $data = [
             'items' => [
                 [
-                    'amount' => $faker->numberBetween(10001) // Creates a string with a length bigger than 110
+                    'amount' => $faker->numberBetween(10001) // Creates a string with a length bigger than 10000
                 ]
             ]
         ];
