@@ -721,7 +721,6 @@ class PaymentControllerTest extends TestCase
 
         $data = [
             'shipping' => [
-                'addressRequired' => true,
                 'street' => $faker->text(1000)
             ],
         ];
