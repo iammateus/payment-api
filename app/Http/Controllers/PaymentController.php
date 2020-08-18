@@ -32,6 +32,7 @@ class PaymentController extends Controller
             'shipping' => 'required',
             'shipping.addressRequired' => 'required|boolean',
             'shipping.street' => 'required_if:shipping.addressRequired,1|max:80',
+            'shipping.number' => 'required_if:shipping.addressRequired,1|max:20',
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|max:36',

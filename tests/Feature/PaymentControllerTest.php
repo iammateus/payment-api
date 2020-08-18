@@ -731,4 +731,36 @@ class PaymentControllerTest extends TestCase
             'shipping.street' => [ 'The shipping.street may not be greater than 80 characters.' ]
         ]);
     }
+
+    public function testPaySendingAddressRequiredAsTrueButNotSendingNumberExpectingUnprocessableEntity()
+    {
+        $data = [
+            'shipping' => [
+                'addressRequired' => true
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.number' => [ 'The shipping.number field is required when shipping.address required is true.' ]
+        ]);
+    }
+
+    public function testPaySendingTooBigNumberExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'number' => $faker->text(1000)
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.number' => [ 'The shipping.number may not be greater than 20 characters.' ]
+        ]);
+    }
 }
