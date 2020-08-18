@@ -135,7 +135,7 @@ class PaymentControllerTest extends TestCase
     
     public function testPaySendingInvalidPaymentMethodExpectingUnprocessableEntity()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('pt_BR');
 
         $data = [
             'method' => $faker->name()
@@ -168,7 +168,7 @@ class PaymentControllerTest extends TestCase
     
     public function testPaySendingNotStringSenderNameExpectingUnprocessableEntity()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('pt_BR');
 
         $data = [
             'sender' => [
@@ -185,7 +185,7 @@ class PaymentControllerTest extends TestCase
     
     public function testPaySendingIncompleteNameExpectingUnprocessableEntity()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('pt_BR');
 
         $data = [
             'sender' => [
@@ -220,7 +220,7 @@ class PaymentControllerTest extends TestCase
     
     public function testPaySedingSenderInvalidDocumentTypeExpectingUnprocessableEntity()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('pt_BR');
 
         $data = [
             'sender' => [
