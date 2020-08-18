@@ -141,7 +141,9 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		$this->assertNotNull($parsed['shippingAddressRequired']);
-		$this->assertEquals($options['shipping']['addressRequired'], $parsed['shippingAddressRequired']);
+
+		$addressRequired = $options['shipping']['addressRequired'] ? 'true' : 'false';
+		$this->assertEquals($addressRequired, $parsed['shippingAddressRequired']);
 	}
 	
 	public function testParseDefaultPaymentParamsParsingSenderExtraAmount()

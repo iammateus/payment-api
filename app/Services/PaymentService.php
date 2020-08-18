@@ -65,7 +65,7 @@ class PaymentService extends Controller
             'senderPhone' => $options['sender']['phone']['number'],
             'senderEmail' => $options['sender']['email'],
             'senderHash' => $options['sender']['hash'],
-            'shippingAddressRequired' => $options['shipping']['addressRequired'],
+            'shippingAddressRequired' => $options['shipping']['addressRequired'] ? 'true' : 'false',
             'extraAmount' => number_format($options['extraAmount'], 2, '.', '')
         ];
         
