@@ -810,4 +810,36 @@ class PaymentControllerTest extends TestCase
             'shipping.city' => [ 'The shipping.city field is required when shipping.address required is true.' ]
         ]);
     }
+    
+    public function testPaySendingTooBigCityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'city' => $faker->text(1000)
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.city' => [ 'The shipping.city may not be greater than 60 characters.' ]
+        ]);
+    }
+    
+    public function testPaySendingTooSmallCityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'shipping' => [
+                'city' => 'a'
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.city' => [ 'The shipping.city must be at least 2 characters.' ]
+        ]);
+    }
 }
