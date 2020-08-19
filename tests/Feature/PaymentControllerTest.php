@@ -795,4 +795,19 @@ class PaymentControllerTest extends TestCase
             'shipping.district' => [ 'The shipping.district may not be greater than 60 characters.' ]
         ]);
     }
+    
+    public function testPaySendingAddressRequiredAsTrueButNotSendingCityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'shipping' => [
+                'addressRequired' => true
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.city' => [ 'The shipping.city field is required when shipping.address required is true.' ]
+        ]);
+    }
 }
