@@ -842,4 +842,36 @@ class PaymentControllerTest extends TestCase
             'shipping.city' => [ 'The shipping.city must be at least 2 characters.' ]
         ]);
     }
+
+    public function testPaySendingAddressRequiredAsTrueButNotSendingCountryExpectingUnprocessableEntity()
+    {
+        $data = [
+            'shipping' => [
+                'addressRequired' => true
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.country' => [ 'The shipping.country field is required when shipping.address required is true.' ]
+        ]);
+    }
+    
+    public function testPaySendingInvalidCountryExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'country' => $faker->word()
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.country' => [ 'The selected shipping.country is invalid.' ]
+        ]);
+    }
 }
