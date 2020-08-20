@@ -874,4 +874,36 @@ class PaymentControllerTest extends TestCase
             'shipping.country' => [ 'The selected shipping.country is invalid.' ]
         ]);
     }
+
+    public function testPaySendingAddressRequiredAsTrueButNotSendingPostalCodeExpectingUnprocessableEntity()
+    {
+        $data = [
+            'shipping' => [
+                'addressRequired' => true
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.postalCode' => [ 'The shipping.postal code field is required when shipping.address required is true.' ]
+        ]);
+    }
+
+    public function testPaySendingInvalidPostalCodeExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'postalCode' =>  $faker->numberBetween(1000000000)
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.postalCode' => [ 'The shipping.postal code must be 8 digits.' ]
+        ]);
+    }
 }
