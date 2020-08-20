@@ -100,8 +100,14 @@ class PaymentControllerTest extends TestCase
                 'hash' => $faker->word()
             ],
             'shipping' => [
-                //@TODO: Improve validation in a way that some fields are required depending on this field
-                'addressRequired' => false
+                'addressRequired' => true,
+                'street' => $faker->streetName,
+                'number' => $faker->text(20),
+                'district' => $faker->text(60),
+                'city' => $faker->city,
+                'state' => $faker->stateAbbr,
+                'country' => $faker->randomElement( ['BRA'] ),
+                'postalCode' => (string) $faker->randomNumber(8)
             ],
             'extraAmount' => 0,
             'items' => [
@@ -904,6 +910,40 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'shipping.postalCode' => [ 'The shipping.postal code must be 8 digits.' ]
+        ]);
+    }
+
+    public function testPaySendingAddressRequiredAsTrueButNotSendingStateExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'addressRequired' => true
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.state' => [ 'The shipping.state field is required when shipping.address required is true.' ]
+        ]);
+    }
+
+    public function testPaySendingInvalidStateExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'state' => $faker->word()
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.state' => [ 'The shipping.state must be 2 characters.' ]
         ]);
     }
 }

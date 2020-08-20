@@ -35,6 +35,7 @@ class PaymentController extends Controller
             'shipping.number' => 'required_if:shipping.addressRequired,1|max:20',
             'shipping.district' => 'required_if:shipping.addressRequired,1|max:60',
             'shipping.city' => 'required_if:shipping.addressRequired,1|max:60|min:2',
+            'shipping.state' => 'required_if:shipping.addressRequired,1|size:2',
             'shipping.country' => 'required_if:shipping.addressRequired,1|in:BRA',
             'shipping.postalCode' => 'required_if:shipping.addressRequired,1|digits:8',
             'extraAmount' => 'required|numeric',
