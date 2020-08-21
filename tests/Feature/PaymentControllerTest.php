@@ -929,21 +929,38 @@ class PaymentControllerTest extends TestCase
             'shipping.state' => [ 'The shipping.state field is required when shipping.address required is true.' ]
         ]);
     }
-
+    
     public function testPaySendingInvalidStateExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+        
+        $data = [
+            'shipping' => [
+                'state' => $faker->word()
+            ],
+        ];
+        
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.state' => [ 'The shipping.state must be 2 characters.' ]
+        ]);
+    }
+        
+    public function testPaySendingTooBigComplementExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'shipping' => [
-                'state' => $faker->word()
+                'complement' => $faker->text(1000)
             ],
         ];
 
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'shipping.state' => [ 'The shipping.state must be 2 characters.' ]
+            'shipping.complement' => [ 'The shipping.complement may not be greater than 40 characters.' ]
         ]);
     }
 }

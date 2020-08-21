@@ -38,6 +38,7 @@ class PaymentController extends Controller
             'shipping.state' => 'required_if:shipping.addressRequired,1|size:2',
             'shipping.country' => 'required_if:shipping.addressRequired,1|in:BRA',
             'shipping.postalCode' => 'required_if:shipping.addressRequired,1|digits:8',
+            'shipping.complement' => 'max:40',
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|max:36',
@@ -45,6 +46,13 @@ class PaymentController extends Controller
             'items.*.quantity' => 'required|integer|min:1|max:100',
             'items.*.amount' => 'required|numeric|max:10000',
         ];
+
+        /* 
+            TODO: Create support for the fields:
+            - shipping: type
+            - shipping: cost
+            - reference
+         */
 
         $this->validate($request, $rules);
 
