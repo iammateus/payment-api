@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\SessionService;
+use App\Services\SessionService;
 
 class SessionController extends Controller
 {

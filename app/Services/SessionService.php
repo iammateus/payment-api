@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use App\Helpers\ResponseParser;
 use App\Helpers\SimpleXMLElementParser;

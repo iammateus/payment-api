@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\PaymentService;
+use App\Services\PaymentService;
 
 class PaymentController extends Controller
 {

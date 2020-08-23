@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use GuzzleHttp\Client;
 use App\Helpers\ResponseParser;
