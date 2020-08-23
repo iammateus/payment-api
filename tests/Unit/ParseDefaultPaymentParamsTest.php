@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Factory as Faker;
-use App\Http\Controllers\PaymentService;
+use App\Services\PaymentService;
 
 class ParseDefaultPaymentParamsTest extends TestCase 
 {
