@@ -2,5 +2,10 @@
 
 echo 'Initializing application'
 
-cp .env.example .env
+if [ ! -e .env ]
+then
+    echo 'Creating .env file'
+    cp .env.example .env
+fi
+
 composer install
