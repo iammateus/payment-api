@@ -6,7 +6,7 @@ use App\Helpers\ResponseParser;
 use App\Helpers\SimpleXMLElementParser;
 use GuzzleHttp\Client;
 
-class SessionService extends Controller
+class SessionService
 {
     private Client $client;
     

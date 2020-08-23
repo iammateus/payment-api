@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use App\Helpers\ResponseParser;
 use App\Helpers\SimpleXMLElementParser;
 
-class PaymentService extends Controller
+class PaymentService
 {
     private Client $client;
 
