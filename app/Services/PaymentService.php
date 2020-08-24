@@ -15,6 +15,12 @@ class PaymentService
         $this->client = $client;
     }
 
+    /**
+     * Logic of payment requests
+     *
+     * @param array $options
+     * @return array
+     */
     public function pay(array $options): array
     {
         $email = env('PAGSEGURO_EMAIL');
@@ -48,10 +54,10 @@ class PaymentService
     }
 
     /**
-     * Parsing default params of a payment request to Pagseguro
+     * Parses default params of a payment request to Pagseguro
      *
-     * @param array $options Internal service formatted data
-     * @return array Pagseguro formatted data
+     * @param array $options Data formatted with this service's format
+     * @return array Data formatted with Pagseguro's format 
      */
     public function parseDefaultPaymentParams (array $options): array
     {
@@ -72,6 +78,12 @@ class PaymentService
         return $parsed;
     }
 
+    /**
+     * Parses items params of a payment request to Pagseguro
+     *
+     * @param array $list Data formatted with this service's format
+     * @return array Data formatted with Pagseguro's format
+     */
     public function parseItems (array $list): array
     {
         $parsed = [];
@@ -87,6 +99,11 @@ class PaymentService
         return $parsed;
     }
 
+    /**
+     * Parses specific params of payment with boleto option
+     *
+     * @return array Specific params of payment with boleto option
+     */
     public function parseBoletoPaymentParams(): array
     {
         $parsed = [
