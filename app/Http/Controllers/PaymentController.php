@@ -63,7 +63,7 @@ class PaymentController extends Controller
 
         $this->validate($request, $rules);
 
-        $payment = $this->paymentService->pay($request->all());
+        $payment = $this->paymentService->store($request->all());
 
         return response()->json([
             'message' => 'SUCCESS',

@@ -21,7 +21,7 @@ class PaymentService
      * @param array $options
      * @return array
      */
-    public function pay(array $options): array
+    public function store (array $options): array
     {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');
