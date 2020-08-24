@@ -15,7 +15,7 @@ class SessionController extends Controller
     }
 
     /**
-     * Request a new session to Pagseguro and returns the session token
+     * Makes the session request to Pagseguro and returns the session token
      *
      * @return JsonResponse
      */

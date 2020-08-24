@@ -15,6 +15,13 @@ class PaymentController extends Controller
         $this->paymentService = $paymentService;
     }
 
+    /**
+     * Makes the payment request to Pagseguro
+     * TODO: Accept Credit Card and Online Debit options
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function store ( Request $request ): JsonResponse
     {
         $rules = [
