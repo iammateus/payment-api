@@ -15,6 +15,11 @@ class SessionService
         $this->client = $client;
     }
 
+    /**
+     * Session request logic
+     *
+     * @return array
+     */
     public function store (): array
     {
         $email = env('PAGSEGURO_EMAIL');
