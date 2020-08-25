@@ -196,7 +196,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$this->assertEquals($options['shipping']['number'], $parsed['shippingAddressNumber']);
 	}
 	
-	public function testParseDefaultPaymentParamsParsingShippingAddressStreetNotSendindShippingAddressNumberExpectingNull()
+	public function testParseDefaultPaymentParamsParsingShippingAddressNumberNotSendindShippingAddressNumberExpectingNull()
 	{
 		$options = $this->fakeOptions();
 
@@ -204,5 +204,29 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
 		
 		$this->assertArrayNotHasKey('shippingAddressNumber', $parsed);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingAddressDistrict()
+	{
+		$faker = Faker::create('pt_BR');
+
+		$options = $this->fakeOptions();
+		$options['shipping']['district'] = $faker->text(20);
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertNotNull($parsed['shippingAddressDistrict']);
+		$this->assertEquals($options['shipping']['district'], $parsed['shippingAddressDistrict']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingAddressDistrictNotSendindShippingDistrictExpectingNull()
+	{
+		$options = $this->fakeOptions();
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertArrayNotHasKey('shippingAddressDistrict', $parsed);
 	}
 }
