@@ -157,4 +157,28 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$intendedExtraAmount = number_format($options['extraAmount'], 2, '.', '');
 		$this->assertEquals($intendedExtraAmount, $parsed['extraAmount']);
 	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingAddressStreet()
+	{
+		$faker = Faker::create('pt_BR');
+
+		$options = $this->fakeOptions();
+		$options['shipping']['street'] = $faker->streetName;
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertNotNull($parsed['shippingAddressStreet']);
+		$this->assertEquals($options['shipping']['street'], $parsed['shippingAddressStreet']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingAddressStreetNotSendindShippingAddressStreetExpectingNull()
+	{
+		$options = $this->fakeOptions();
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertArrayNotHasKey('shippingAddressStreet', $parsed);
+	}
 }

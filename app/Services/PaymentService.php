@@ -74,7 +74,12 @@ class PaymentService
             'shippingAddressRequired' => $options['shipping']['addressRequired'] ? 'true' : 'false',
             'extraAmount' => number_format($options['extraAmount'], 2, '.', '')
         ];
+
+        if ( isset( $options['shipping']['street'] ) ) {
+            $parsed['shippingAddressStreet'] = $options['shipping']['street'];
+        }
         
+
         return $parsed;
     }
 
