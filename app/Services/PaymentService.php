@@ -89,6 +89,10 @@ class PaymentService
         if ( isset( $options['shipping']['city'] ) ) {
             $parsed['shippingAddressCity'] = $options['shipping']['city'];
         }
+        
+        if ( isset( $options['shipping']['state'] ) ) {
+            $parsed['shippingAddressState'] = $options['shipping']['state'];
+        }
 
         return $parsed;
     }

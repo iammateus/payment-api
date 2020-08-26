@@ -253,4 +253,28 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		
 		$this->assertArrayNotHasKey('shippingAddressCity', $parsed);
 	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingAddressState()
+	{
+		$faker = Faker::create('pt_BR');
+
+		$options = $this->fakeOptions();
+		$options['shipping']['state'] = $faker->stateAbbr;
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertNotNull($parsed['shippingAddressState']);
+		$this->assertEquals($options['shipping']['state'], $parsed['shippingAddressState']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingAddressStateNotSendindShippingStateExpectingNull()
+	{
+		$options = $this->fakeOptions();
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertArrayNotHasKey('shippingAddressState', $parsed);
+	}
 }
