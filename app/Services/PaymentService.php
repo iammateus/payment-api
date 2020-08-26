@@ -97,6 +97,10 @@ class PaymentService
         if ( isset( $options['shipping']['country'] ) ) {
             $parsed['shippingAddressCountry'] = $options['shipping']['country'];
         }
+        
+        if ( isset( $options['shipping']['postalCode'] ) ) {
+            $parsed['shippingAddressPostalCode'] = $options['shipping']['postalCode'];
+        }
 
         return $parsed;
     }
