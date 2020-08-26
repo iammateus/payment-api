@@ -12,12 +12,12 @@ class SimpleXMLElementParser {
      * @param SimpleXMLElement $element
      * @return array
      */
-    public static function parseToArray( SimpleXMLElement $element ): array
+    public static function parseToArray( SimpleXMLElement $element ): ?array
     {
         foreach ( (array) $element as $key => $value ) {
             $result[$key] = is_object($value) ? self::parseToArray($value) : $value;
         }
         
-        return $result;
+        return $result ?? null;
     }
 }

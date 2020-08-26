@@ -32,4 +32,20 @@ class SimpleXMLElementParserTest extends TestCase
         $this->assertEquals($child3, $parsed['child2']['child3']);
         $this->assertEquals($child5, $parsed['child2']['child4']['child5']);
     }
+
+    public function testParseToArrayWithEmptyObject()
+    {
+        $faker = Faker::create();
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>
+                    <data>
+                        <child></child>
+                    </data>';
+
+        $simpleXMLElement =  new SimpleXMLElement( $xml );
+
+        $parsed = SimpleXMLElementParser::parseToArray($simpleXMLElement);
+        
+        $this->assertNull($parsed['child']);
+    }
 }
