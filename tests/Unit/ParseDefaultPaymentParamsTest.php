@@ -307,7 +307,7 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		$faker = Faker::create('pt_BR');
 
 		$options = $this->fakeOptions();
-		$options['shipping']['postalCode'] = $faker->randomElement( ['BRA'] );
+		$options['shipping']['postalCode'] = $faker->numberBetween(10000000, 99999999);
 
 		$this->paymentService->parseDefaultPaymentParams($options);
 		$parsed = $this->paymentService->parseDefaultPaymentParams($options);

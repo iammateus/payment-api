@@ -107,7 +107,7 @@ class PaymentControllerTest extends TestCase
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
                 'country' => $faker->randomElement( ['BRA'] ),
-                'postalCode' => (string) $faker->randomNumber(8)
+                'postalCode' => $faker->numberBetween(10000000, 99999999)
             ],
             'extraAmount' => 0,
             'items' => [
