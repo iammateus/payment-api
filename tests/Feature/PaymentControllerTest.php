@@ -72,7 +72,7 @@ class PaymentControllerTest extends TestCase
             'Content-Type' => 'application/xml'
         ];
 
-        $mock = new MockHandler( [ new MockResponse( 200, $headers, $body ) ] );
+        $mock = new MockHandler( [ new MockResponse( Response::HTTP_OK, $headers, $body ) ] );
         $handlerStack = HandlerStack::create( $mock );
 
         $client = new Client( [ 'handler' => $handlerStack ] );
