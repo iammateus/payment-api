@@ -101,6 +101,10 @@ class PaymentService
         if ( isset( $options['shipping']['postalCode'] ) ) {
             $parsed['shippingAddressPostalCode'] = $options['shipping']['postalCode'];
         }
+       
+        if ( isset( $options['shipping']['cost'] ) ) {
+            $parsed['shippingCost'] = number_format($options['shipping']['cost'], 2, '.', '');
+        }
 
         return $parsed;
     }

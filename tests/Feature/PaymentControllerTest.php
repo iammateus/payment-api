@@ -107,7 +107,8 @@ class PaymentControllerTest extends TestCase
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
                 'country' => $faker->randomElement( ['BRA'] ),
-                'postalCode' => $faker->numberBetween(10000000, 99999999)
+                'postalCode' => $faker->numberBetween(10000000, 99999999),
+                'cost' => $faker->randomFloat(),
             ],
             'extraAmount' => 0,
             'items' => [
@@ -121,6 +122,7 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
+        // var_dump($this->response->getContent());
         $this->assertResponseOk();
         $this->seeJsonStructure([
             'message',
@@ -961,6 +963,23 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'shipping.complement' => [ 'The shipping.complement may not be greater than 40 characters.' ]
+        ]);
+    }
+
+    public function testPaySedingNonNumericShippingCostExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'cost' => $faker->text()
+            ],
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.cost' => [ 'The shipping.cost must be a number.' ]
         ]);
     }
 }
