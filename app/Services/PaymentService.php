@@ -105,6 +105,10 @@ class PaymentService
         if ( isset( $options['shipping']['cost'] ) ) {
             $parsed['shippingCost'] = number_format($options['shipping']['cost'], 2, '.', '');
         }
+        
+        if ( isset( $options['shipping']['type'] ) ) {
+            $parsed['shippingType'] = $options['shipping']['type'];
+        }
 
         return $parsed;
     }

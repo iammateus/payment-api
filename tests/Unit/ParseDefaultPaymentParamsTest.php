@@ -351,4 +351,29 @@ class ParseDefaultPaymentParamsTest extends TestCase
 		
 		$this->assertArrayNotHasKey('shippingCost', $parsed);
 	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingType()
+	{
+		$faker = Faker::create('pt_BR');
+
+		$options = $this->fakeOptions();
+		$options['shipping']['type'] = $faker->randomElement([ 1, 2, 3 ]);
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertNotNull($parsed['shippingType']);
+
+		$this->assertEquals($options['shipping']['type'], $parsed['shippingType']);
+	}
+	
+	public function testParseDefaultPaymentParamsParsingShippingTypeNotSendindShippingTypeExpectingNull()
+	{
+		$options = $this->fakeOptions();
+
+		$this->paymentService->parseDefaultPaymentParams($options);
+		$parsed = $this->paymentService->parseDefaultPaymentParams($options);
+		
+		$this->assertArrayNotHasKey('shippingType', $parsed);
+	}
 }

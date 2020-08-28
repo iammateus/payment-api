@@ -47,6 +47,7 @@ class PaymentController extends Controller
             'shipping.postalCode' => 'required_if:shipping.addressRequired,1|digits:8',
             'shipping.complement' => 'max:40',
             'shipping.cost' => 'numeric',
+            'shipping.type' => 'in:1,2,3',
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|max:36',
@@ -57,8 +58,6 @@ class PaymentController extends Controller
 
         /* 
             TODO: Create support for the fields:
-            - shipping: type
-            - shipping: cost
             - reference
          */
 

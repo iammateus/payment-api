@@ -109,6 +109,7 @@ class PaymentControllerTest extends TestCase
                 'country' => $faker->randomElement( ['BRA'] ),
                 'postalCode' => $faker->numberBetween(10000000, 99999999),
                 'cost' => $faker->randomFloat(),
+                'type' => $faker->randomElement([ 1, 2, 3 ]),
             ],
             'extraAmount' => 0,
             'items' => [
@@ -980,6 +981,23 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'shipping.cost' => [ 'The shipping.cost must be a number.' ]
+        ]);
+    }
+
+    public function testPaySedingInvalidShippingTypeExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'shipping' => [
+                'type' => $faker->numberBetween(4)
+            ],
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'shipping.type' => [ 'The selected shipping.type is invalid.' ]
         ]);
     }
 }
