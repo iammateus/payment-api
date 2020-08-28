@@ -109,6 +109,10 @@ class PaymentService
         if ( isset( $options['shipping']['type'] ) ) {
             $parsed['shippingType'] = $options['shipping']['type'];
         }
+        
+        if ( isset( $options['reference'] ) ) {
+            $parsed['reference'] = $options['reference'];
+        }
 
         return $parsed;
     }

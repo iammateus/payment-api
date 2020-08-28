@@ -48,6 +48,7 @@ class PaymentController extends Controller
             'shipping.complement' => 'max:40',
             'shipping.cost' => 'numeric',
             'shipping.type' => 'in:1,2,3',
+            'reference' => 'max:200',
             'extraAmount' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|max:36',
@@ -55,11 +56,6 @@ class PaymentController extends Controller
             'items.*.quantity' => 'required|integer|min:1|max:100',
             'items.*.amount' => 'required|numeric|max:10000',
         ];
-
-        /* 
-            TODO: Create support for the fields:
-            - reference
-         */
 
         $this->validate($request, $rules);
 

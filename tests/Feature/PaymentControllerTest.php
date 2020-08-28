@@ -111,6 +111,7 @@ class PaymentControllerTest extends TestCase
                 'cost' => $faker->randomFloat(),
                 'type' => $faker->randomElement([ 1, 2, 3 ]),
             ],
+            'reference' => $faker->text(200),
             'extraAmount' => 0,
             'items' => [
                 [
@@ -998,6 +999,21 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'shipping.type' => [ 'The selected shipping.type is invalid.' ]
+        ]);
+    }
+
+    public function testPaySedingTooBigReferenceExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'reference' => $faker->text(1000)
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'reference' => [ 'The reference may not be greater than 200 characters.' ]
         ]);
     }
 }
