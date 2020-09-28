@@ -634,7 +634,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySendingTooBigItemIdExpectingUnprocessableEntity()
+    public function testPaySendingTooLongItemIdExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -653,7 +653,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySendingTooBigItemDescriptionExpectingUnprocessableEntity()
+    public function testPaySendingTooLongItemDescriptionExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -725,7 +725,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySendingTooBigStreetExpectingUnprocessableEntity()
+    public function testPaySendingTooLongStreetExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -757,7 +757,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySendingTooBigNumberExpectingUnprocessableEntity()
+    public function testPaySendingTooLongNumberExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -789,7 +789,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySendingTooBigDistrictExpectingUnprocessableEntity()
+    public function testPaySendingTooLongDistrictExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -821,7 +821,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySendingTooBigCityExpectingUnprocessableEntity()
+    public function testPaySendingTooLongCityExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -934,13 +934,13 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySendingInvalidStateExpectingUnprocessableEntity()
+    public function testPaySendingTooLongStateExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
         
         $data = [
             'shipping' => [
-                'state' => $faker->word()
+                'state' => $faker->text()
             ],
         ];
         
@@ -951,7 +951,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
         
-    public function testPaySendingTooBigComplementExpectingUnprocessableEntity()
+    public function testPaySendingTooLongComplementExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1002,7 +1002,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySedingTooBigReferenceExpectingUnprocessableEntity()
+    public function testPaySedingTooLongReferenceExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
