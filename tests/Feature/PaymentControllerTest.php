@@ -132,6 +132,62 @@ class PaymentControllerTest extends TestCase
             ]
         ]);
     }
+    
+    public function testPayWithCreditCardExpectingSuccess()
+    {   
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'method' => 'CREDIT_CARD',
+            'sender' => [
+                'name' => $faker->name(),
+                'document' => [
+                    'type' =>  'CPF',
+                    'value' => $faker->cpf(false)
+                ],
+                'phone' => [
+                    'areaCode' => $faker->areaCode(),
+                    'number' => $faker->numberBetween(10000000, 999999999)
+                ],
+                'email' => $faker->email,
+                'hash' => $faker->word()
+            ],
+            'shipping' => [
+                'addressRequired' => true,
+                'street' => $faker->streetName,
+                'number' => $faker->text(20),
+                'district' => $faker->text(60),
+                'city' => $faker->city,
+                'state' => $faker->stateAbbr,
+                'country' => $faker->randomElement( ['BRA'] ),
+                'postalCode' => $faker->numberBetween(10000000, 99999999),
+                'cost' => $faker->randomFloat(),
+                'type' => $faker->randomElement([ 1, 2, 3 ]),
+            ],
+            'reference' => $faker->text(200),
+            'extraAmount' => 0,
+            'items' => [
+                [
+                    'id' => $faker->text(36),
+                    'description' => $faker->text(100),
+                    'quantity' => $faker->numberBetween(1, 100),
+                    'amount' => $faker->randomFloat(2,1, 10000)
+                ]
+                ],
+            'holder' => [
+                'a'
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseOk();
+        $this->seeJsonStructure([
+            'message',
+            'data' => [
+                'paymentLink'
+            ]
+        ]);
+    }
 
     public function testPayWithoutSendingPaymentMethodExpectingUnprocessableEntity()
     {
@@ -1013,6 +1069,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'reference' => [ 'The reference may not be greater than 200 characters.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSedingHolderExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder' => [ 'The holder field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }

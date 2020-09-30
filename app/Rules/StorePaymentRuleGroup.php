@@ -5,7 +5,7 @@ namespace App\Rules;
 class StorePaymentRuleGroup extends RuleGroup{
 
     protected static array $rules = [
-        'method' => 'required|in:BOLETO',
+        'method' => 'required|in:BOLETO,CREDIT_CARD',
         'sender' => 'required',
         'sender.name' => 'required|string|min_words:2',
         'sender.document' => 'required',
@@ -35,6 +35,6 @@ class StorePaymentRuleGroup extends RuleGroup{
         'items.*.description' => 'required|max:100',
         'items.*.quantity' => 'required|integer|min:1|max:100',
         'items.*.amount' => 'required|numeric|max:10000',
+        'holder' => 'required_if:method,CREDIT_CARD'
     ];
-
 }

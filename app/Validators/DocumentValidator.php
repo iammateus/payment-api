@@ -19,27 +19,13 @@ class DocumentValidator {
      */
     public function validate(string $attribute, string $value, array $parameters = [], Validator $validator)
     {
-        $typePath = explode('.', $parameters[0]);
+        $validationType = $this->getValidationType($parameters, $validator);
 
-        $type = $validator->getData();
-        foreach ($typePath as $path) {
-            if (empty($type[$path])){
-                throw new InvalidArgumentException("The given path of document type is not valid.", 1);
-            }
-
-            $type = $type[$path];
-        }
-
-        if(! in_array($type, [ 'CPF', 'CNPJ' ]) ){
-            
-        }
-
-        if($type === 'CPF'){
+        if($validationType === 'CPF'){
             return $this->cpf($value);
         }
         
         return $this->cnpj($value);
-        
     }
 
     /**
@@ -192,4 +178,28 @@ class DocumentValidator {
 
         return true;
     }
+
+    /**
+     * Gets the type of document validation will happen by the value of the field of a specified path
+     *
+     * @param array $parameters
+     * @param Validator $validator
+     * @return string
+     */
+    private function getValidationType(array $parameters, Validator $validator): string
+    {
+        $validationTypePathArray = explode('.', $parameters[0]);
+
+        $data = $validator->getData();
+        foreach ($validationTypePathArray as $path) {
+            if (empty($data[$path])){
+                throw new InvalidArgumentException("The given path of document type is not valid.", 1);
+            }
+
+            $data = $data[$path];
+        }
+
+        return $data;
+    }
+
 }
