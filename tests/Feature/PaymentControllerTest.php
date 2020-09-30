@@ -85,11 +85,11 @@ class PaymentControllerTest extends TestCase
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'method' => $faker->randomElement( ['BOLETO'] ),
+            'method' => 'BOLETO',
             'sender' => [
                 'name' => $faker->name(),
                 'document' => [
-                    'type' =>  $faker->randomElement( ['CPF'] ),
+                    'type' =>  'CPF',
                     'value' => $faker->cpf(false)
                 ],
                 'phone' => [
@@ -124,7 +124,6 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
-        // var_dump($this->response->getContent());
         $this->assertResponseOk();
         $this->seeJsonStructure([
             'message',
