@@ -35,6 +35,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'items.*.description' => 'required|max:100',
         'items.*.quantity' => 'required|integer|min:1|max:100',
         'items.*.amount' => 'required|numeric|max:10000',
-        'holder' => 'required_if:method,CREDIT_CARD'
+        'holder' => 'required_if:method,CREDIT_CARD',
+        'holder.name' => 'required_if:method,CREDIT_CARD|max:50'
     ];
 }
