@@ -176,7 +176,9 @@ class PaymentControllerTest extends TestCase
                 ],
             'holder' => [
                 'name' => $faker->text(50),
-                'documents' => 'aaa'
+                'documents' => [
+                    'type' => 'a'
+                ]
             ]
         ];
 
@@ -1126,6 +1128,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'holder.documents' => [ 'The holder.documents field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSedingHolderDocumentsTypeExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.documents.type' => [ 'The holder.documents.type field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }
