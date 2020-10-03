@@ -178,8 +178,9 @@ class PaymentControllerTest extends TestCase
                 'name' => $faker->text(50),
                 'documents' => [
                     'type' => 'CPF',
-                    'value' => $faker->cpf(false)
-                ]
+                    'value' => $faker->cpf(false),
+                    'birthDate' => $faker->date('d/m/Y')
+                ],
             ]
         ];
 
@@ -1250,6 +1251,39 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->dontSeeJson([
             'holder.documents.value' => [ 'The holder.documents.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingHolderDocumentsBirthDateExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.documents.birthDate' => [ 'The holder.documents.birth date field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPaySendingInvalidHolderDocumentsBirthDateExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'method' => 'CREDIT_CARD',
+            'holder' => [
+                'documents' => [
+                    'birthDate' => $faker->date()
+                ]
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.documents.birthDate' => [ 'The holder.documents.birth date does not match the format d/m/Y.' ]
         ]);
     }
 }
