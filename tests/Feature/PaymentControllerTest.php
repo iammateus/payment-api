@@ -177,7 +177,8 @@ class PaymentControllerTest extends TestCase
             'holder' => [
                 'name' => $faker->text(50),
                 'documents' => [
-                    'type' => 'CPF'
+                    'type' => 'CPF',
+                    'value' => $faker->cpf(false)
                 ]
             ]
         ];
@@ -1160,6 +1161,95 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'holder.documents.type' => [ 'The selected holder.documents.type is invalid.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSedingHolderDocumentsValueExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.documents.value' => [ 'The holder.documents.value field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+
+    public function testPaySedingInvalidHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'holder' => [
+                'documents' => [
+                    'type' => 'CPF',
+                    'value' => $faker->cnpj(false),
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->seeJson([
+            'holder.documents.value' => [ 'The holder.documents.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPaySedingInvalidHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'holder' => [
+                'documents' => [
+                    'type' => 'CNPJ',
+                    'value' => $faker->cpf(false),
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->seeJson([
+            'holder.documents.value' => [ 'The holder.documents.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPaySedingValidHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'holder' => [
+                'documents' => [
+                    'type' => 'CPF',
+                    'value' => $faker->cpf(false),
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->dontSeeJson([
+            'holder.documents.value' => [ 'The holder.documents.value is not a valid document.' ]
+        ]);
+    }
+    
+    public function testPaySedingValidHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'holder' => [
+                'documents' => [
+                    'type' => 'CNPJ',
+                    'value' => $faker->cnpj(false),
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->dontSeeJson([
+            'holder.documents.value' => [ 'The holder.documents.value is not a valid document.' ]
         ]);
     }
 }

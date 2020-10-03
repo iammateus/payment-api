@@ -38,6 +38,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'holder' => 'required_if:method,CREDIT_CARD',
         'holder.name' => 'required_if:method,CREDIT_CARD|max:50',
         'holder.documents' => 'required_if:method,CREDIT_CARD',
-        'holder.documents.type' => 'required_if:method,CREDIT_CARD|in:CPF,CNPJ'
+        'holder.documents.type' => 'required_if:method,CREDIT_CARD|in:CPF,CNPJ',
+        'holder.documents.value' => 'required_if:method,CREDIT_CARD|document:holder.documents.type'
     ];
 }
