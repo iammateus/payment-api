@@ -269,7 +269,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSenderDocumentExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderDocumentExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -278,7 +278,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSenderDocumentTypeExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderDocumentTypeExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -287,7 +287,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingSenderInvalidDocumentTypeExpectingUnprocessableEntity()
+    public function testPaySendingSenderInvalidDocumentTypeExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -306,7 +306,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSenderDocumentValueExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderDocumentValueExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -315,7 +315,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidSenderDocumentCPFValueExpectingUnprocessableEntity()
+    public function testPaySendingInvalidSenderDocumentCPFValueExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -334,7 +334,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidSenderDocumentCNPJValueExpectingUnprocessableEntity()
+    public function testPaySendingInvalidSenderDocumentCNPJValueExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -353,7 +353,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingValidSenderDocumentCNPJ()
+    public function testPaySendingValidSenderDocumentCNPJ()
     {
         $faker = Faker::create('pt_BR');
 
@@ -371,7 +371,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingValidSenderDocumentCPF()
+    public function testPaySendingValidSenderDocumentCPF()
     {
         $faker = Faker::create('pt_BR');
 
@@ -389,7 +389,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSenderPhoneExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderPhoneExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -398,7 +398,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSenderPhoneAreaCodeExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderPhoneAreaCodeExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -407,7 +407,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidSenderPhoneAreaCodeExpectingUnprocessableEntity()
+    public function testPaySendingInvalidSenderPhoneAreaCodeExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -426,7 +426,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithoutSedingSenderPhoneNumberExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderPhoneNumberExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -435,7 +435,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidSenderPhoneNumberExpectingUnprocessableEntity()
+    public function testPaySendingInvalidSenderPhoneNumberExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -454,7 +454,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithoutSedingSenderEmailExpectingUnprocessableEntity()
+    public function testPayWithoutSendingSenderEmailExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -463,7 +463,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidSenderEmailExpectingUnprocessableEntity()
+    public function testPaySendingInvalidSenderEmailExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -480,7 +480,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithotSedingShippingDataExpectingUnprocessableEntity()
+    public function testPayWithotSendingShippingDataExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -489,7 +489,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithotSedingShippingAddressRequiredExpectingUnprocessableEntity()
+    public function testPayWithotSendingShippingAddressRequiredExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -498,7 +498,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidShippingAddressRequiredExpectingUnprocessableEntity()
+    public function testPaySendingInvalidShippingAddressRequiredExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -515,7 +515,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithoutSedingExtraAmountExpectingUnprocessableEntity()
+    public function testPayWithoutSendingExtraAmountExpectingUnprocessableEntity()
     {
         $this->post('/payment');
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -524,7 +524,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidExtraAmountExpectingUnprocessableEntity()
+    public function testPaySendingInvalidExtraAmountExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
         
@@ -1027,7 +1027,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySedingNonNumericShippingCostExpectingUnprocessableEntity()
+    public function testPaySendingNonNumericShippingCostExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1044,7 +1044,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySedingInvalidShippingTypeExpectingUnprocessableEntity()
+    public function testPaySendingInvalidShippingTypeExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1061,7 +1061,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySedingTooLongReferenceExpectingUnprocessableEntity()
+    public function testPaySendingTooLongReferenceExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1076,7 +1076,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSedingHolderExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingHolderExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1089,7 +1089,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithCreditCardWithoutSedingHolderNameExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingHolderNameExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1102,7 +1102,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingTooLongHolderNameExpectingUnprocessableEntity()
+    public function testPaySendingTooLongHolderNameExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1119,7 +1119,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPayWithCreditCardWithoutSedingHolderDocumentsExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingHolderDocumentsExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1132,7 +1132,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSedingHolderDocumentsTypeExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingHolderDocumentsTypeExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1164,7 +1164,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSedingHolderDocumentsValueExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingHolderDocumentsValueExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1177,7 +1177,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPaySedingInvalidHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
+    public function testPaySendingInvalidHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1196,7 +1196,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingInvalidHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
+    public function testPaySendingInvalidHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1215,7 +1215,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingValidHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
+    public function testPaySendingValidHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1234,7 +1234,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
     
-    public function testPaySedingValidHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
+    public function testPaySendingValidHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
