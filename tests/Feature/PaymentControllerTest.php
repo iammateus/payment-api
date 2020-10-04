@@ -181,11 +181,16 @@ class PaymentControllerTest extends TestCase
                     'value' => $faker->cpf(false),
                     'birthDate' => $faker->date('d/m/Y')
                 ],
-                'phone' => 'a'
+                'phone' => [
+                    'areaCode' => $faker->areaCode(),
+                    'number' => $faker->numberBetween(1000000, 999999999)
+                ]
             ]
         ];
 
+        
         $this->post('/payment', $data);
+
         $this->assertResponseOk();
         $this->seeJsonStructure([
             'message',
@@ -1298,6 +1303,87 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'holder.phone' => [ 'The holder.phone field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingHolderPhoneAreaCodeExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.phone.areaCode' => [ 'The holder.phone.area code field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPaySendingInvalidHolderPhoneAreaCodeExpectingUnprocessableEntity()
+    {
+        $data = [
+            'holder' => [
+                'phone' => [
+                    'areaCode' => 'a'
+                ]
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.phone.areaCode' => [ 'The holder.phone.area code must be a valid Brazil area code.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingHolderPhoneNumberExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.phone.number' => [ 'The holder.phone.number field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+
+    public function testPaySendingTooShortHolderPhoneNumberExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'holder' => [
+                'phone' => [
+                    'number' => $faker->numberBetween(0, 999999)
+                ]
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.phone.number' => [ 'The holder.phone.number must be between 7 and 9 digits.' ]
+        ]);
+    }
+    
+    public function testPaySendingTooLongHolderPhoneNumberExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'holder' => [
+                'phone' => [
+                    'number' => $faker->numberBetween(1000000000)
+                ]
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.phone.number' => [ 'The holder.phone.number must be between 7 and 9 digits.' ]
         ]);
     }
 }
