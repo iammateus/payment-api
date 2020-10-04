@@ -181,6 +181,7 @@ class PaymentControllerTest extends TestCase
                     'value' => $faker->cpf(false),
                     'birthDate' => $faker->date('d/m/Y')
                 ],
+                'phone' => 'a'
             ]
         ];
 
@@ -1284,6 +1285,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'holder.documents.birthDate' => [ 'The holder.documents.birth date does not match the format d/m/Y.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingHolderPhoneExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'holder.phone' => [ 'The holder.phone field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }
