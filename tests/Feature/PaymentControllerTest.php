@@ -1400,4 +1400,17 @@ class PaymentControllerTest extends TestCase
             'creditCard' => [ 'The credit card field is required when method is CREDIT_CARD.' ]
         ]);
     }
+
+    public function testPayWithCreditCardWithoutSendingCreditCardTokenExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'creditCard.token' => [ 'The credit card.token field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
 }

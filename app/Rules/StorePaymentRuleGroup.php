@@ -44,6 +44,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'holder.phone' => 'required_if:method,CREDIT_CARD',
         'holder.phone.areaCode' => 'required_if:method,CREDIT_CARD|area_code',
         'holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
-        'creditCard' => 'required_if:method,CREDIT_CARD'
+        'creditCard' => 'required_if:method,CREDIT_CARD',
+        'creditCard.token' => 'required_if:method,CREDIT_CARD',
     ];
 }
