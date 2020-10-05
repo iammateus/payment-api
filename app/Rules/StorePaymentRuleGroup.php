@@ -43,6 +43,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'holder.documents.birthDate' => 'required_if:method,CREDIT_CARD|date_format:d/m/Y',
         'holder.phone' => 'required_if:method,CREDIT_CARD',
         'holder.phone.areaCode' => 'required_if:method,CREDIT_CARD|area_code',
-        'holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9'
+        'holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
+        'creditCard' => 'required_if:method,CREDIT_CARD'
     ];
 }

@@ -185,7 +185,8 @@ class PaymentControllerTest extends TestCase
                     'areaCode' => $faker->areaCode(),
                     'number' => $faker->numberBetween(1000000, 999999999)
                 ]
-            ]
+            ],
+            'creditCard' => 'a'
         ];
 
         
@@ -1384,6 +1385,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'holder.phone.number' => [ 'The holder.phone.number must be between 7 and 9 digits.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingCreditCardExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'creditCard' => [ 'The credit card field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }
