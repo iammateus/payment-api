@@ -188,7 +188,8 @@ class PaymentControllerTest extends TestCase
                     ]
                 ],
                 'token' => $faker->text()
-            ]
+            ],
+            'installment' => 'a'
         ];
 
         
@@ -1433,6 +1434,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'creditCard.token' => [ 'The credit card.token field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingInstallmentExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'installment' => [ 'The installment field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }
