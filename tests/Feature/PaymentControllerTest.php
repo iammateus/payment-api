@@ -189,7 +189,9 @@ class PaymentControllerTest extends TestCase
                 ],
                 'token' => $faker->text()
             ],
-            'installment' => 'a'
+            'installment' => [
+                'quantity' => $faker->numberBetween(1, 18)
+            ]
         ];
 
         
@@ -1447,6 +1449,72 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'installment' => [ 'The installment field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingInstallmentQuantityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'installment.quantity' => [ 'The installment.quantity field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+
+    public function testPaySendingInvalidInstallmentQuantityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'installment' => [
+                'quantity' => $faker->word()
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        
+        $responseContent = json_decode($this->response->getContent(), true);
+        $this->assertContains('The installment.quantity must be a number.', $responseContent ['installment.quantity']);
+    }
+    
+    public function testPaySendingTooSmallInstallmentQuantityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'installment' => [
+                'quantity' => 0
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $this->seeJson([
+            'installment.quantity' => [ 'The installment.quantity must be at least 1.' ]
+        ]);
+    }
+    
+    public function testPaySendingTooBigInstallmentQuantityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'installment' => [
+                'quantity' => 19
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $this->seeJson([
+            'installment.quantity' => [ 'The installment.quantity may not be greater than 18.' ]
         ]);
     }
 }

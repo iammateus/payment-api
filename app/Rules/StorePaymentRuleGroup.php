@@ -47,6 +47,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'creditCard.holder.phone.areaCode' => 'required_if:method,CREDIT_CARD|area_code',
         'creditCard.holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
         'creditCard.holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
-        'installment' => 'required_if:method,CREDIT_CARD'
+        'installment' => 'required_if:method,CREDIT_CARD',
+        'installment.quantity' => 'required_if:method,CREDIT_CARD|numeric|min:1|max:18'
     ];
 }
