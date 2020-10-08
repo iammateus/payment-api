@@ -192,7 +192,8 @@ class PaymentControllerTest extends TestCase
             'installment' => [
                 'quantity' => $faker->numberBetween(1, 18),
                 'value' => $faker->randomFloat()
-            ]
+            ],
+            'noInterestInstallmentQuantity' => 'a'
         ];
 
         
@@ -1545,6 +1546,19 @@ class PaymentControllerTest extends TestCase
         
         $this->seeJson([
             'installment.value' => [ 'The installment.value must be a number.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingNoInterestInstallmentQuantityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'noInterestInstallmentQuantity' => [ 'The no interest installment quantity field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }

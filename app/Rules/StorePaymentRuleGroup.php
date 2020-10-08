@@ -49,6 +49,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'creditCard.holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
         'installment' => 'required_if:method,CREDIT_CARD',
         'installment.quantity' => 'required_if:method,CREDIT_CARD|integer|min:1|max:18',
-        'installment.value' => 'required_if:method,CREDIT_CARD|numeric'
+        'installment.value' => 'required_if:method,CREDIT_CARD|numeric',
+        'noInterestInstallmentQuantity' => 'required_if:method,CREDIT_CARD'
     ];
 }
