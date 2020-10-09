@@ -191,9 +191,10 @@ class PaymentControllerTest extends TestCase
             ],
             'installment' => [
                 'quantity' => $faker->numberBetween(1, 18),
-                'value' => $faker->randomFloat()
+                'value' => $faker->randomFloat(),
+                'noInterestQuantity' => $faker->numberBetween(1, 18)
             ],
-            'noInterestInstallmentQuantity' => $faker->numberBetween(1, 18)
+            'billing' => 'a'
         ];
 
         
@@ -1549,7 +1550,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingNoInterestInstallmentQuantityExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingInstallmentNoInterestQuantityExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1558,22 +1559,37 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment',$data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'noInterestInstallmentQuantity' => [ 'The no interest installment quantity field is required when method is CREDIT_CARD.' ]
+            'installment.noInterestQuantity' => [ 'The installment.no interest quantity field is required when method is CREDIT_CARD.' ]
         ]);
     }
     
-    public function testPaySendingInvalidNoInterestInstallmentQuantityExpectingUnprocessableEntity()
+    public function testPaySendingInvalidInstallmentNoInterestQuantityExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'noInterestInstallmentQuantity' =>  $faker->word()
+            'installment' => [
+                'noInterestQuantity' =>  $faker->word()
+            ]
         ];
 
         $this->post('/payment',$data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'noInterestInstallmentQuantity' => [ 'The no interest installment quantity must be an integer.' ]
+            'installment.noInterestQuantity' => [ 'The installment.no interest quantity must be an integer.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingBillingAddressExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD'
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing' => [ 'The billing field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }
