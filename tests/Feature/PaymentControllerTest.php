@@ -198,7 +198,9 @@ class PaymentControllerTest extends TestCase
                 'street' => $faker->text(80),
                 'number' => $faker->word(),
                 'district' => $faker->text(60),
-                'city' => $faker->city
+                'city' => $faker->city,
+                'state' => $faker->stateAbbr,
+                'postalCode' => $faker->numberBetween(10000000, 99999999)
             ]
         ];
 
@@ -1713,6 +1715,83 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'billing.city' => [ 'The billing.city may not be greater than 60 characters.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingBillingAddressStateExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD',
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.state' => [ 'The billing.state field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPaySendingInvalidBillingAddressStateExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'state' => $faker->text(10)
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.state' => [ 'The billing.state must be 2 characters.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingBillingAddressPostalCodeExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD',
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.postalCode' => [ 'The billing.postal code field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPaySendingTooShortBillingAddressPostalCodeExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'postalCode' => $faker->numberBetween(0, 9999999)
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.postalCode' => [ 'The billing.postal code must be 8 digits.' ]
+        ]);
+    }
+
+    public function testPaySendingTooLongBillingAddressPostalCodeExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'postalCode' => $faker->numberBetween(100000000)
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.postalCode' => [ 'The billing.postal code must be 8 digits.' ]
         ]);
     }
 }
