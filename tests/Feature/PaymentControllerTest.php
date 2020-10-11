@@ -197,7 +197,8 @@ class PaymentControllerTest extends TestCase
             'billing' => [
                 'street' => $faker->text(80),
                 'number' => $faker->word(),
-                'district' => $faker->text(60)
+                'district' => $faker->text(60),
+                'city' => $faker->city
             ]
         ];
 
@@ -1667,6 +1668,51 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'billing.district' => [ 'The billing.district may not be greater than 60 characters.' ]
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingBillingAddressCityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD',
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.city' => [ 'The billing.city field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPaySendingTooShortBillingAddressCityExpectingUnprocessableEntity()
+    {
+        $data = [
+            'billing' => [
+                'city' => 'a'
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.city' => [ 'The billing.city must be at least 2 characters.' ]
+        ]);
+    }
+
+    public function testPaySendingTooLongBillingAddressCityExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'city' => $faker->text(1000)
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.city' => [ 'The billing.city may not be greater than 60 characters.' ]
         ]);
     }
 }
