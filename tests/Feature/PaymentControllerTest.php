@@ -1794,4 +1794,21 @@ class PaymentControllerTest extends TestCase
             'billing.postalCode' => [ 'The billing.postal code must be 8 digits.' ]
         ]);
     }
+
+    public function testPaySendingTooLongBillingAddressComplementExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'complement' => $faker->text(1000)
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.complement' => [ 'The billing.complement may not be greater than 40 characters.' ]
+        ]);
+    }
 }

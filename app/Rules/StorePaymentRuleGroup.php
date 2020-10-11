@@ -57,6 +57,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'billing.district' => 'required_if:method,CREDIT_CARD|max:60',
         'billing.city' => 'required_if:method,CREDIT_CARD|min:2|max:60',
         'billing.state' => 'required_if:method,CREDIT_CARD|size:2',
-        'billing.postalCode' => 'required_if:method,CREDIT_CARD|digits:8'
+        'billing.postalCode' => 'required_if:method,CREDIT_CARD|digits:8',
+        'billing.complement' => 'max:40'
     ];
 }
