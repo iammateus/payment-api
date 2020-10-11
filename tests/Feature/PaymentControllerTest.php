@@ -195,7 +195,8 @@ class PaymentControllerTest extends TestCase
                 'noInterestQuantity' => $faker->numberBetween(1, 18)
             ],
             'billing' => [
-                'street' => $faker->text(80)
+                'street' => $faker->text(80),
+                'number' => $faker->word(),
             ]
         ];
 
@@ -1613,7 +1614,6 @@ class PaymentControllerTest extends TestCase
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'method' => 'CREDIT_CARD',
             'billing' => [
                 'street' => $faker->text(1000)
             ]
@@ -1623,6 +1623,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'billing.street' => [ 'The billing.street may not be greater than 80 characters.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingBillingAddressNumberExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD',
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.number' => [ 'The billing.number field is required when method is CREDIT_CARD.' ]
         ]);
     }
 }
