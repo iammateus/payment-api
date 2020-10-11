@@ -51,6 +51,7 @@ class StorePaymentRuleGroup extends RuleGroup{
         'installment.quantity' => 'required_if:method,CREDIT_CARD|integer|min:1|max:18',
         'installment.value' => 'required_if:method,CREDIT_CARD|numeric',
         'installment.noInterestQuantity' => 'required_if:method,CREDIT_CARD|integer',
-        'billing' => 'required_if:method,CREDIT_CARD'
+        'billing' => 'required_if:method,CREDIT_CARD',
+        'billing.street' => 'required_if:method,CREDIT_CARD|max:80'
     ];
 }
