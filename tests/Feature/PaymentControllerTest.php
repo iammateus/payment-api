@@ -197,6 +197,7 @@ class PaymentControllerTest extends TestCase
             'billing' => [
                 'street' => $faker->text(80),
                 'number' => $faker->word(),
+                'district' => $faker->text(60)
             ]
         ];
 
@@ -1636,6 +1637,36 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'billing.number' => [ 'The billing.number field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+    
+    public function testPayWithCreditCardWithoutSendingBillingAddressDistrictExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD',
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.district' => [ 'The billing.district field is required when method is CREDIT_CARD.' ]
+        ]);
+    }
+
+    public function testPaySendingTooLongBillingAddressDistrictExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'district' => $faker->text(1000)
+            ]
+        ];
+
+        $this->post('/payment',$data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.district' => [ 'The billing.district may not be greater than 60 characters.' ]
         ]);
     }
 }
