@@ -17,9 +17,6 @@ class PaymentService
 
     public function makePagseguroPayment (array $options): array
     {
-        $email = env('PAGSEGURO_EMAIL');
-        $token = env('PAGSEGURO_TOKEN');
-
         $methodParams = $this->parseBoletoPaymentParams($options);
 
         $defaultParams = $this->parseDefaultPaymentParams($options);
@@ -34,8 +31,8 @@ class PaymentService
             [
                 'form_params' => $params,
                 'query' => [
-                    'email' => $email,
-                    'token' => $token,
+                    'email' => env('PAGSEGURO_EMAIL'),
+                    'token' => env('PAGSEGURO_TOKEN'),
                 ]
             ]
         );
