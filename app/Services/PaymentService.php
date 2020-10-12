@@ -17,6 +17,11 @@ class PaymentService
 
     public function makePagseguroPayment (array $options): array
     {
+        return $this->payWithBoleto( $options );
+    }
+
+    public function payWithBoleto (array $options): array
+    {
         $methodParams = $this->parseBoletoPaymentParams($options);
 
         $defaultParams = $this->parseDefaultPaymentParams($options);
