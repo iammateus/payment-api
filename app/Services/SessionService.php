@@ -15,12 +15,7 @@ class SessionService
         $this->client = $client;
     }
 
-    /**
-     * Session request logic
-     *
-     * @return array
-     */
-    public function store (): array
+    public function getSessionTokenFromPagseguroApi (): array
     {
         $email = env('PAGSEGURO_EMAIL');
         $token = env('PAGSEGURO_TOKEN');

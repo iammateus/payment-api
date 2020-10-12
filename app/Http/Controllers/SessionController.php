@@ -14,14 +14,9 @@ class SessionController extends Controller
         $this->sessionService = $sessionService;
     }
 
-    /**
-     * Makes the session request to Pagseguro and returns the session token
-     *
-     * @return JsonResponse
-     */
-    public function store (): JsonResponse
+    public function getSessionTokenFromPagseguroApi (): JsonResponse
     {
-        $session = $this->sessionService->store();
+        $session = $this->sessionService->getSessionTokenFromPagseguroApi();
 
         $token = $session['id'];
 

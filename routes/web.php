@@ -17,6 +17,6 @@ $router->get('/healthcheck', function () use ($router) {
     ]);
 });
 
-$router->get('/session', 'SessionController@store');
+$router->get('/session', 'SessionController@getSessionTokenFromPagseguroApi');
 
-$router->post('/payment', 'PaymentController@store');
+$router->post('/payment', 'PaymentController@makePagseguroPayment');

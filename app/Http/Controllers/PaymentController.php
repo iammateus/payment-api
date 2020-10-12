@@ -16,20 +16,14 @@ class PaymentController extends Controller
         $this->paymentService = $paymentService;
     }
 
-    /**
-     * Makes the payment request to Pagseguro
-     * TODO: Accept Credit Card and Online Debit options
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function store ( Request $request ): JsonResponse
+    public function makePagseguroPayment ( Request $request ): JsonResponse
     {
         $rules = StorePaymentRuleGroup::getRules();
 
         $this->validate($request, $rules);
 
-        $payment = $this->paymentService->store($request->all());
+        //TODO: Accept Credit Card and Online Debit options
+        $payment = $this->paymentService->makePagseguroPayment($request->all());
 
         return response()->json([
             'message' => 'SUCCESS',
