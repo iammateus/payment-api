@@ -21,6 +21,8 @@ class PaymentService
         switch ($options['method']) {
             case 'BOLETO':
                 return $this->payWithBoleto( $options );
+            case 'CREDIT_CARD':
+                return $this->payWithCreditCard( $options );
         }
     }
 
@@ -53,6 +55,10 @@ class PaymentService
         return $response;
     }
 
+    public function payWithCreditCard (array $options): array
+    {
+        return [];
+    }
     /**
      * Parses default params of a payment request to Pagseguro
      */
