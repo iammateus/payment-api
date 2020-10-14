@@ -208,12 +208,6 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
 
         $this->assertResponseOk();
-        $this->seeJsonStructure([
-            'message',
-            'data' => [
-                'paymentLink'
-            ]
-        ]);
     }
 
     public function testPayWithoutSendingPaymentMethodExpectingUnprocessableEntity()
