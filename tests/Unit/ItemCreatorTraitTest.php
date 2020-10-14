@@ -7,8 +7,8 @@ class ItemCreatorTraitTest extends TestCase
 {
     public function testCreateItem()
     {
-		$mock = $this->getMockForTrait(ItemCreatorTrait::class);
-		$item = $mock->createItem();
-		$this->assertIsArray($item);
+        $mock = $this->getMockForTrait(ItemCreatorTrait::class);
+        $item = $mock->createItem();
+        $this->assertIsArray($item);
     }
 }

@@ -35,19 +35,9 @@ class PaymentService
 
         $params = array_merge($defaultParams, $itemsParams, $methodParams);
 
-        $link = env('PAGSEGURO_URL') . '/transactions';
 
-        $response = $this->client->request(
-            'POST',
-            $link,
-            [
-                'form_params' => $params,
-                'query' => [
-                    'email' => env('PAGSEGURO_EMAIL'),
-                    'token' => env('PAGSEGURO_TOKEN'),
-                ]
-            ]
-        );
+        $response = $this->makePagseguroRequest($params);
+
 
         $response = ResponseParser::parseXml($response);
 
@@ -59,6 +49,25 @@ class PaymentService
     public function payWithCreditCard(array $options): array
     {
         return [];
+    }
+
+    public function makePagseguroRequest(array $paymentData): object
+    {
+        $link = env('PAGSEGURO_URL') . '/transactions';
+
+        $response = $this->client->request(
+            'POST',
+            $link,
+            [
+                'form_params' => $paymentData,
+                'query' => [
+                    'email' => env('PAGSEGURO_EMAIL'),
+                    'token' => env('PAGSEGURO_TOKEN'),
+                ]
+            ]
+        );
+
+        return $response;
     }
 
     /**
