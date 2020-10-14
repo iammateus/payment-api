@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use InvalidArgumentException;
 use App\Helpers\ResponseParser;
 use App\Helpers\SimpleXMLElementParser;
 
@@ -17,7 +18,10 @@ class PaymentService
 
     public function makePagseguroPayment (array $options): array
     {
-        return $this->payWithBoleto( $options );
+        switch ($options['method']) {
+            case 'BOLETO':
+                return $this->payWithBoleto( $options );
+        }
     }
 
     public function payWithBoleto (array $options): array
