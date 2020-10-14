@@ -15,29 +15,31 @@ class PaymentService
         $this->client = $client;
     }
 
-    public function makePagseguroPayment (array $options): array
+    public function makePagseguroPayment(array $options): array
     {
         switch ($options['method']) {
             case 'BOLETO':
-                return $this->payWithBoleto( $options );
+                return $this->payWithBoleto($options);
             case 'CREDIT_CARD':
-                return $this->payWithCreditCard( $options );
+                return $this->payWithCreditCard($options);
         }
     }
 
-    public function payWithBoleto (array $options): array
+    public function payWithBoleto(array $options): array
     {
         $methodParams = $this->parseBoletoPaymentParams($options);
 
         $defaultParams = $this->parseDefaultPaymentParams($options);
-        
+
         $itemsParams = $this->parseItems($options['items']);
-        
-        $params = array_merge( $defaultParams, $itemsParams, $methodParams );
+
+        $params = array_merge($defaultParams, $itemsParams, $methodParams);
 
         $link = env('PAGSEGURO_URL') . '/transactions';
 
-        $response = $this->client->request('POST', $link,
+        $response = $this->client->request(
+            'POST',
+            $link,
             [
                 'form_params' => $params,
                 'query' => [
@@ -54,14 +56,15 @@ class PaymentService
         return $response;
     }
 
-    public function payWithCreditCard (array $options): array
+    public function payWithCreditCard(array $options): array
     {
         return [];
     }
+
     /**
-     * Parses default params of a payment request to Pagseguro
+     * Parses default params of a payment request to Pagseguro's format
      */
-    public function parseDefaultPaymentParams (array $options): array
+    public function parseDefaultPaymentParams(array $options): array
     {
         $parsed = [
             'paymentMode' => 'default',
@@ -77,42 +80,42 @@ class PaymentService
             'extraAmount' => number_format($options['extraAmount'], 2, '.', '')
         ];
 
-        if ( isset( $options['shipping']['street'] ) ) {
+        if (isset($options['shipping']['street'])) {
             $parsed['shippingAddressStreet'] = $options['shipping']['street'];
         }
 
-        if ( isset( $options['shipping']['number'] ) ) {
+        if (isset($options['shipping']['number'])) {
             $parsed['shippingAddressNumber'] = $options['shipping']['number'];
         }
-        if ( isset( $options['shipping']['district'] ) ) {
+        if (isset($options['shipping']['district'])) {
             $parsed['shippingAddressDistrict'] = $options['shipping']['district'];
         }
-        
-        if ( isset( $options['shipping']['city'] ) ) {
+
+        if (isset($options['shipping']['city'])) {
             $parsed['shippingAddressCity'] = $options['shipping']['city'];
         }
-        
-        if ( isset( $options['shipping']['state'] ) ) {
+
+        if (isset($options['shipping']['state'])) {
             $parsed['shippingAddressState'] = $options['shipping']['state'];
         }
-        
-        if ( isset( $options['shipping']['country'] ) ) {
+
+        if (isset($options['shipping']['country'])) {
             $parsed['shippingAddressCountry'] = $options['shipping']['country'];
         }
-        
-        if ( isset( $options['shipping']['postalCode'] ) ) {
+
+        if (isset($options['shipping']['postalCode'])) {
             $parsed['shippingAddressPostalCode'] = $options['shipping']['postalCode'];
         }
-       
-        if ( isset( $options['shipping']['cost'] ) ) {
+
+        if (isset($options['shipping']['cost'])) {
             $parsed['shippingCost'] = number_format($options['shipping']['cost'], 2, '.', '');
         }
-        
-        if ( isset( $options['shipping']['type'] ) ) {
+
+        if (isset($options['shipping']['type'])) {
             $parsed['shippingType'] = $options['shipping']['type'];
         }
-        
-        if ( isset( $options['reference'] ) ) {
+
+        if (isset($options['reference'])) {
             $parsed['reference'] = $options['reference'];
         }
 
@@ -120,9 +123,9 @@ class PaymentService
     }
 
     /**
-     * Parses items params of a payment request to Pagseguro
+     * Parses items params of a payment request to Pagseguro's format
      */
-    public function parseItems (array $list): array
+    public function parseItems(array $list): array
     {
         $parsed = [];
 
@@ -138,7 +141,7 @@ class PaymentService
     }
 
     /**
-     * Parses specific params of payment with boleto option
+     * Parses specific params of payment with boleto option to format
      */
     public function parseBoletoPaymentParams(): array
     {
