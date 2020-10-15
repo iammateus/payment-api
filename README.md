@@ -1,5 +1,5 @@
 # Payment API
-An example of payment API integrating with API Checkout Transparente by Pagseguro.
+An example of payment API that integrates with API Checkout Transparente by Pagseguro.
 
 This project was created for learning purposes and I am refactoring it for better testing and cleaner code.
 
@@ -8,7 +8,7 @@ Currently, the working version is in the branch [feature/pagseguro-integration](
 ## Requeriments
 
 1. This project runs on [Docker](https://docs.docker.com/).
-2.   [Pagseguro](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) credentials.
+2. [Pagseguro](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) credentials.
 
 ## Installation
 
