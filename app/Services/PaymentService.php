@@ -153,13 +153,23 @@ class PaymentService
     }
 
     /**
-     * Parses specific params of payment with boleto option to format
+     * Parses specific params of payment with boleto option to Pagseguro's format
      */
     public function parseBoletoPaymentParams(): array
     {
         $parsed = [
             'paymentMethod' => 'boleto',
         ];
+
+        return $parsed;
+    }
+
+    /**
+     * Parses specific params of payment with credit card to Pagseguro's format
+     */
+    public function parseCreditCardPaymentParams(): array
+    {
+        $parsed = [];
 
         return $parsed;
     }
