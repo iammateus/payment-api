@@ -4,20 +4,20 @@ namespace App\Helpers;
 
 use SimpleXMLElement;
 
-class SimpleXMLElementParser {
-
+class SimpleXMLElementParser
+{
     /**
      * Parse a SimpleXmlElement object to an array
      *
-     * @param SimpleXMLElement $element
+     * @param $element
      * @return array
      */
-    public static function parseToArray( SimpleXMLElement $element ): ?array
+    public static function parseToArray($element): ?array
     {
-        foreach ( (array) $element as $key => $value ) {
-            $result[$key] = is_object($value) ? self::parseToArray($value) : $value;
+        foreach ((array) $element as $key => $value) {
+            $result[$key] = is_object($value) || is_array($value) ? self::parseToArray($value) : $value;
         }
-        
+
         return $result ?? null;
     }
 }
