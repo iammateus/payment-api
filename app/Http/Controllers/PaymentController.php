@@ -11,12 +11,12 @@ class PaymentController extends Controller
 {
     private PaymentService $paymentService;
 
-    public function __construct ( PaymentService $paymentService )
+    public function __construct(PaymentService $paymentService)
     {
         $this->paymentService = $paymentService;
     }
 
-    public function makePagseguroPayment ( Request $request ): JsonResponse
+    public function makePagseguroPayment(Request $request): JsonResponse
     {
         $rules = StorePaymentRuleGroup::getRules();
 
@@ -27,9 +27,7 @@ class PaymentController extends Controller
 
         return response()->json([
             'message' => 'SUCCESS',
-            'data' => [
-                'paymentLink' => $payment['paymentLink']
-            ]
+            'data' => $payment
         ]);
-    } 
+    }
 }

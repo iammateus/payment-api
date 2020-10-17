@@ -28,20 +28,23 @@ class PaymentService
     public function payWithBoleto(array $options): array
     {
         $methodParams = $this->parseBoletoPaymentParams($options);
-
         $defaultParams = $this->parseDefaultPaymentParams($options);
-
         $itemsParams = $this->parseItems($options['items']);
-
         $params = array_merge($defaultParams, $itemsParams, $methodParams);
 
+        $xmlEncodedPagseguroResponse = $this->makePagseguroRequest($params);
+        $xmlObjectPagseguroResponse = ResponseParser::parseXml($xmlEncodedPagseguroResponse);
+        $arrayPagseguroResponse = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
 
-        $response = $this->makePagseguroRequest($params);
+        $response = $this->formatPaymentWithBoletoResponse($arrayPagseguroResponse);
+        return $response;
+    }
 
-
-        $response = ResponseParser::parseXml($response);
-
-        $response = SimpleXMLElementParser::parseToArray($response);
+    public function formatPaymentWithBoletoResponse(array $arrayPagseguroResponse)
+    {
+        $response = [
+            'paymentLink' => $arrayPagseguroResponse['paymentLink']
+        ];
 
         return $response;
     }
