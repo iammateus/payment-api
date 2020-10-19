@@ -167,9 +167,11 @@ class PaymentService
     /**
      * Parses specific params of payment with credit card to Pagseguro's format
      */
-    public function parseCreditCardPaymentParams(): array
+    public function parseCreditCardPaymentParams(array $options): array
     {
-        $parsed = [];
+        $parsed = [
+            'creditCardToken' => $options['creditCard']['token']
+        ];
 
         return $parsed;
     }
