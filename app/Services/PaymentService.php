@@ -170,7 +170,8 @@ class PaymentService
     public function parseCreditCardPaymentParams(array $options): array
     {
         $parsed = [
-            'creditCardToken' => $options['creditCard']['token']
+            'creditCardToken' => $options['creditCard']['token'],
+            'creditCardHolderName' => $options['creditCard']['holder']['name']
         ];
 
         return $parsed;

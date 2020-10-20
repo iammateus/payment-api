@@ -14,7 +14,10 @@ class ParseCreditCardPaymentParamsTest extends TestCase
 
         return [
             'creditCard' => [
-                'token' => $faker->text()
+                'token' => $faker->text(),
+                'holder' => [
+                    'name' => $faker->name()
+                ]
             ]
         ];
     }
@@ -34,5 +37,14 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
         $this->assertEquals($result['creditCardToken'], $options['creditCard']['token']);
+    }
+
+    public function testParseCreditCardPaymentParamsParsingCreditCardHolderName()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['creditCardHolderName'], $options['creditCard']['holder']['name']);
     }
 }
