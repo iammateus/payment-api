@@ -172,7 +172,8 @@ class PaymentService
         $parsed = [
             'creditCardToken' => $options['creditCard']['token'],
             'creditCardHolderName' => $options['creditCard']['holder']['name'],
-            'creditCardHolderCpf' => $options['creditCard']['holder']['cpf']
+            'creditCardHolderCpf' => $options['creditCard']['holder']['cpf'],
+            'creditCardHolderBirthDate' => $options['creditCard']['holder']['birthDate'],
         ];
 
         return $parsed;
