@@ -178,7 +178,7 @@ class PaymentControllerTest extends TestCase
             'creditCard' => [
                 'holder' => [
                     'name' => $faker->text(50),
-                    'documents' => [
+                    'document' => [
                         'type' => 'CPF',
                         'value' => $faker->cpf(false),
                         'birthDate' => $faker->date('d/m/Y')
@@ -193,7 +193,7 @@ class PaymentControllerTest extends TestCase
             'installment' => [
                 'quantity' => $faker->numberBetween(1, 18),
                 'value' => $faker->randomFloat(),
-                'noInterestQuantity' => $faker->numberBetween(1, 18)
+                'maxInstallmentNoInterest' => $faker->numberBetween(1, 18)
             ],
             'billing' => [
                 'street' => $faker->text(80),
@@ -1132,7 +1132,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentsExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1141,11 +1141,11 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.documents' => ['The credit card.holder.documents field is required when method is CREDIT_CARD.']
+            'creditCard.holder.document' => ['The credit card.holder.document field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentsTypeExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentTypeExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1154,18 +1154,18 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.documents.type' => ['The credit card.holder.documents.type field is required when method is CREDIT_CARD.']
+            'creditCard.holder.document.type' => ['The credit card.holder.document.type field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidCreditCardHolderDocumentsTypeExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardHolderDocumentTypeExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'creditCard' => [
                 'holder' => [
-                    'documents' => [
+                    'document' => [
                         'type' => $faker->word()
                     ]
                 ]
@@ -1175,11 +1175,11 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.documents.type' => ['The selected credit card.holder.documents.type is invalid.']
+            'creditCard.holder.document.type' => ['The selected credit card.holder.document.type is invalid.']
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentsValueExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentValueExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1188,18 +1188,18 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.documents.value' => ['The credit card.holder.documents.value field is required when method is CREDIT_CARD.']
+            'creditCard.holder.document.value' => ['The credit card.holder.document.value field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidCreditCardHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardHolderDocumentValueOfTypeCpfExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'creditCard' => [
                 'holder' => [
-                    'documents' => [
+                    'document' => [
                         'type' => 'CPF',
                         'value' => $faker->cnpj(false),
                     ]
@@ -1209,18 +1209,18 @@ class PaymentControllerTest extends TestCase
 
         $this->post('/payment', $data);
         $this->seeJson([
-            'creditCard.holder.documents.value' => ['The credit card.holder.documents.value is not a valid document.']
+            'creditCard.holder.document.value' => ['The credit card.holder.document.value is not a valid document.']
         ]);
     }
 
-    public function testPaySendingInvalidCreditCardHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardHolderDocumentValueOfTypeCnpjExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'creditCard' => [
                 'holder' => [
-                    'documents' => [
+                    'document' => [
                         'type' => 'CNPJ',
                         'value' => $faker->cpf(false),
                     ]
@@ -1230,18 +1230,18 @@ class PaymentControllerTest extends TestCase
 
         $this->post('/payment', $data);
         $this->seeJson([
-            'creditCard.holder.documents.value' => ['The credit card.holder.documents.value is not a valid document.']
+            'creditCard.holder.document.value' => ['The credit card.holder.document.value is not a valid document.']
         ]);
     }
 
-    public function testPaySendingValidCreditCardHolderDocumentsValueOfTypeCpfExpectingUnprocessableEntity()
+    public function testPaySendingValidCreditCardHolderDocumentValueOfTypeCpfExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'creditCard' => [
                 'holder' => [
-                    'documents' => [
+                    'document' => [
                         'type' => 'CPF',
                         'value' => $faker->cpf(false),
                     ]
@@ -1251,18 +1251,18 @@ class PaymentControllerTest extends TestCase
 
         $this->post('/payment', $data);
         $this->dontSeeJson([
-            'creditCard.holder.documents.value' => ['The credit card.holder.documents.value is not a valid document.']
+            'creditCard.holder.document.value' => ['The credit card.holder.document.value is not a valid document.']
         ]);
     }
 
-    public function testPaySendingValidCreditCardHolderDocumentsValueOfTypeCnpjExpectingUnprocessableEntity()
+    public function testPaySendingValidCreditCardHolderDocumentValueOfTypeCnpjExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'creditCard' => [
                 'holder' => [
-                    'documents' => [
+                    'document' => [
                         'type' => 'CNPJ',
                         'value' => $faker->cnpj(false),
                     ]
@@ -1272,11 +1272,11 @@ class PaymentControllerTest extends TestCase
 
         $this->post('/payment', $data);
         $this->dontSeeJson([
-            'creditCard.holder.documents.value' => ['The credit card.holder.documents.value is not a valid document.']
+            'creditCard.holder.document.value' => ['The credit card.holder.document.value is not a valid document.']
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentsBirthDateExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentBirthDateExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1285,11 +1285,11 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.documents.birthDate' => ['The credit card.holder.documents.birth date field is required when method is CREDIT_CARD.']
+            'creditCard.holder.document.birthDate' => ['The credit card.holder.document.birth date field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidCreditCardHolderDocumentsBirthDateExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardHolderDocumentBirthDateExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1297,7 +1297,7 @@ class PaymentControllerTest extends TestCase
             'method' => 'CREDIT_CARD',
             'creditCard' => [
                 'holder' => [
-                    'documents' => [
+                    'document' => [
                         'birthDate' => $faker->date()
                     ]
                 ]
@@ -1307,7 +1307,7 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.documents.birthDate' => ['The credit card.holder.documents.birth date does not match the format d/m/Y.']
+            'creditCard.holder.document.birthDate' => ['The credit card.holder.document.birth date does not match the format d/m/Y.']
         ]);
     }
 
@@ -1545,7 +1545,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingInstallmentNoInterestQuantityExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingInstallmentMaxInstallmentNoInterestExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1554,24 +1554,24 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment.noInterestQuantity' => ['The installment.no interest quantity field is required when method is CREDIT_CARD.']
+            'installment.maxInstallmentNoInterest' => ['The installment.max installment no interest field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidInstallmentNoInterestQuantityExpectingUnprocessableEntity()
+    public function testPaySendingInvalidInstallmentMaxInstallmentNoInterestExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
             'installment' => [
-                'noInterestQuantity' =>  $faker->word()
+                'maxInstallmentNoInterest' =>  $faker->word()
             ]
         ];
 
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment.noInterestQuantity' => ['The installment.no interest quantity must be an integer.']
+            'installment.maxInstallmentNoInterest' => ['The installment.max installment no interest must be an integer.']
         ]);
     }
 

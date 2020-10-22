@@ -2,7 +2,8 @@
 
 namespace App\Rules;
 
-class StorePaymentRuleGroup extends RuleGroup{
+class StorePaymentRuleGroup extends RuleGroup
+{
 
     protected static array $rules = [
         'method' => 'required|in:BOLETO,CREDIT_CARD',
@@ -39,18 +40,17 @@ class StorePaymentRuleGroup extends RuleGroup{
         'creditCard.token' => 'required_if:method,CREDIT_CARD',
         'creditCard.holder' => 'required_if:method,CREDIT_CARD',
         'creditCard.holder.name' => 'required_if:method,CREDIT_CARD|max:50',
-        'creditCard.holder.documents' => 'required_if:method,CREDIT_CARD',
-        'creditCard.holder.documents.type' => 'required_if:method,CREDIT_CARD|in:CPF,CNPJ',
-        'creditCard.holder.documents.value' => 'required_if:method,CREDIT_CARD|document:creditCard.holder.documents.type',
-        'creditCard.holder.documents.birthDate' => 'required_if:method,CREDIT_CARD|date_format:d/m/Y',
+        'creditCard.holder.document' => 'required_if:method,CREDIT_CARD',
+        'creditCard.holder.document.type' => 'required_if:method,CREDIT_CARD|in:CPF,CNPJ',
+        'creditCard.holder.document.value' => 'required_if:method,CREDIT_CARD|document:creditCard.holder.document.type',
+        'creditCard.holder.document.birthDate' => 'required_if:method,CREDIT_CARD|date_format:d/m/Y',
         'creditCard.holder.phone' => 'required_if:method,CREDIT_CARD',
         'creditCard.holder.phone.areaCode' => 'required_if:method,CREDIT_CARD|area_code',
-        'creditCard.holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
         'creditCard.holder.phone.number' => 'required_if:method,CREDIT_CARD|digits_between:7,9',
         'installment' => 'required_if:method,CREDIT_CARD',
         'installment.quantity' => 'required_if:method,CREDIT_CARD|integer|min:1|max:18',
         'installment.value' => 'required_if:method,CREDIT_CARD|numeric',
-        'installment.noInterestQuantity' => 'required_if:method,CREDIT_CARD|integer',
+        'installment.maxInstallmentNoInterest' => 'required_if:method,CREDIT_CARD|integer',
         'billing' => 'required_if:method,CREDIT_CARD',
         'billing.street' => 'required_if:method,CREDIT_CARD|max:80',
         'billing.number' => 'required_if:method,CREDIT_CARD',
