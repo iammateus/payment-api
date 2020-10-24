@@ -90,8 +90,8 @@ class PaymentControllerTest extends TestCase
             'sender' => [
                 'name' => $faker->name(),
                 'document' => [
-                    'type' =>  'CPF',
-                    'value' => $faker->cpf(false)
+                    'type' =>  'CNPJ',
+                    'value' => $faker->cnpj(false)
                 ],
                 'phone' => [
                     'areaCode' => $faker->areaCode(),
