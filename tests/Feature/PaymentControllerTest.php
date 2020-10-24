@@ -178,21 +178,21 @@ class PaymentControllerTest extends TestCase
             'creditCard' => [
                 'holder' => [
                     'name' => $faker->text(50),
+                    'birthDate' => $faker->date('d/m/Y'),
                     'document' => [
                         'type' => 'CPF',
                         'value' => $faker->cpf(false),
-                        'birthDate' => $faker->date('d/m/Y')
                     ],
                     'phone' => [
                         'areaCode' => $faker->areaCode(),
                         'number' => $faker->numberBetween(1000000, 999999999)
                     ]
                 ],
-                'token' => $faker->text()
-            ],
-            'installment' => [
-                'quantity' => $faker->numberBetween(1, 18),
-                'value' => $faker->randomFloat(),
+                'token' => $faker->text(),
+                'installment' => [
+                    'quantity' => $faker->numberBetween(1, 18),
+                    'value' => $faker->randomFloat(),
+                ],
                 'maxInstallmentNoInterest' => $faker->numberBetween(1, 18)
             ],
             'billing' => [
@@ -1276,7 +1276,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingCreditCardHolderDocumentBirthDateExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardHolderBirthDateExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1285,11 +1285,11 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.document.birthDate' => ['The credit card.holder.document.birth date field is required when method is CREDIT_CARD.']
+            'creditCard.holder.birthDate' => ['The credit card.holder.birth date field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidCreditCardHolderDocumentBirthDateExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardHolderBirthDateExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
@@ -1297,9 +1297,7 @@ class PaymentControllerTest extends TestCase
             'method' => 'CREDIT_CARD',
             'creditCard' => [
                 'holder' => [
-                    'document' => [
-                        'birthDate' => $faker->date()
-                    ]
+                    'birthDate' => $faker->date()
                 ]
             ]
         ];
@@ -1307,7 +1305,7 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'creditCard.holder.document.birthDate' => ['The credit card.holder.document.birth date does not match the format d/m/Y.']
+            'creditCard.holder.birthDate' => ['The credit card.holder.birth date does not match the format d/m/Y.']
         ]);
     }
 
@@ -1437,7 +1435,7 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingInstallmentExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardInstallmentExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1446,11 +1444,11 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment' => ['The installment field is required when method is CREDIT_CARD.']
+            'creditCard.installment' => ['The credit card.installment field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingInstallmentQuantityExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardInstallmentQuantityExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1459,17 +1457,19 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment.quantity' => ['The installment.quantity field is required when method is CREDIT_CARD.']
+            'creditCard.installment.quantity' => ['The credit card.installment.quantity field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidInstallmentQuantityExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardInstallmentQuantityExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'installment' => [
-                'quantity' => $faker->word()
+            'creditCard' => [
+                'installment' => [
+                    'quantity' => $faker->word()
+                ]
             ]
         ];
 
@@ -1477,14 +1477,16 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $responseContent = json_decode($this->response->getContent(), true);
-        $this->assertContains('The installment.quantity must be an integer.', $responseContent['installment.quantity']);
+        $this->assertContains('The credit card.installment.quantity must be an integer.', $responseContent['creditCard.installment.quantity']);
     }
 
-    public function testPaySendingTooSmallInstallmentQuantityExpectingUnprocessableEntity()
+    public function testPaySendingTooSmallCreditCardInstallmentQuantityExpectingUnprocessableEntity()
     {
         $data = [
-            'installment' => [
-                'quantity' => 0
+            'creditCard' => [
+                'installment' => [
+                    'quantity' => 0
+                ]
             ]
         ];
 
@@ -1492,17 +1494,19 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $this->seeJson([
-            'installment.quantity' => ['The installment.quantity must be at least 1.']
+            'creditCard.installment.quantity' => ['The credit card.installment.quantity must be at least 1.']
         ]);
     }
 
-    public function testPaySendingTooBigInstallmentQuantityExpectingUnprocessableEntity()
+    public function testPaySendingTooBigCreditCardInstallmentQuantityExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'installment' => [
-                'quantity' => $faker->numberBetween(19)
+            'creditCard' => [
+                'installment' => [
+                    'quantity' => $faker->numberBetween(19)
+                ]
             ]
         ];
 
@@ -1510,11 +1514,11 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $this->seeJson([
-            'installment.quantity' => ['The installment.quantity may not be greater than 18.']
+            'creditCard.installment.quantity' => ['The credit card.installment.quantity may not be greater than 18.']
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingInstallmentValueExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardInstallmentValueExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1523,17 +1527,19 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment.value' => ['The installment.value field is required when method is CREDIT_CARD.']
+            'creditCard.installment.value' => ['The credit card.installment.value field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidInstallmentValueUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardInstallmentValueUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'installment' => [
-                'value' => $faker->word()
+            'creditCard' => [
+                'installment' => [
+                    'value' => $faker->word()
+                ]
             ]
         ];
 
@@ -1541,11 +1547,11 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $this->seeJson([
-            'installment.value' => ['The installment.value must be a number.']
+            'creditCard.installment.value' => ['The credit card.installment.value must be a number.']
         ]);
     }
 
-    public function testPayWithCreditCardWithoutSendingInstallmentMaxInstallmentNoInterestExpectingUnprocessableEntity()
+    public function testPayWithCreditCardWithoutSendingCreditCardMaxInstallmentNoInterestExpectingUnprocessableEntity()
     {
         $data = [
             'method' => 'CREDIT_CARD'
@@ -1554,16 +1560,16 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment.maxInstallmentNoInterest' => ['The installment.max installment no interest field is required when method is CREDIT_CARD.']
+            'creditCard.maxInstallmentNoInterest' => ['The credit card.max installment no interest field is required when method is CREDIT_CARD.']
         ]);
     }
 
-    public function testPaySendingInvalidInstallmentMaxInstallmentNoInterestExpectingUnprocessableEntity()
+    public function testPaySendingInvalidCreditCardMaxInstallmentNoInterestExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
 
         $data = [
-            'installment' => [
+            'creditCard' => [
                 'maxInstallmentNoInterest' =>  $faker->word()
             ]
         ];
@@ -1571,7 +1577,7 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
-            'installment.maxInstallmentNoInterest' => ['The installment.max installment no interest must be an integer.']
+            'creditCard.maxInstallmentNoInterest' => ['The credit card.max installment no interest must be an integer.']
         ]);
     }
 
