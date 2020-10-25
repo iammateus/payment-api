@@ -19,6 +19,10 @@ class ParseCreditCardPaymentParamsTest extends TestCase
                     'name' => $faker->name(),
                     'cpf' => $faker->cpf(false),
                     'birthDate' => $faker->date(),
+                    'document' => [
+                        'type' => 'CPF',
+                        'value' => $faker->cpf(false),
+                    ],
                 ]
             ]
         ];
@@ -66,5 +70,14 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
         $this->assertEquals($result['creditCardHolderBirthDate'], $options['creditCard']['holder']['birthDate']);
+    }
+
+    public function testParseCreditCardPaymentParamsParsingCreditCardHolderCpfWhenSendigDocumentOfTypeCpf()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['creditCardHolderCPF'], $options['creditCard']['holder']['document']['value']);
     }
 }

@@ -78,13 +78,14 @@ class PaymentService
      */
     public function parseDefaultPaymentParams(array $options): array
     {
-        $documentType = $options['sender']['document']['type'];
+        $docType = $options['sender']['document']['type'];
+
         $parsed = [
             'paymentMode' => 'default',
             'currency' => 'BRL',
             'notificationURL' => env("PAGSEGURO_NOTIFICATION_URL"),
             'senderName' => $options['sender']['name'],
-            'sender' . $documentType => $options['sender']['document']['value'], //senderCPF or senderCNPJ
+            'sender' . $docType => $options['sender']['document']['value'], //senderCPF or senderCNPJ
             'senderAreaCode' => $options['sender']['phone']['areaCode'],
             'senderPhone' => $options['sender']['phone']['number'],
             'senderEmail' => $options['sender']['email'],
@@ -170,11 +171,14 @@ class PaymentService
      */
     public function parseCreditCardPaymentParams(array $options): array
     {
+        $docType = $options['creditCard']['holder']['document']['type'];
+
         $parsed = [
             'creditCardToken' => $options['creditCard']['token'],
             'creditCardHolderName' => $options['creditCard']['holder']['name'],
             'creditCardHolderCpf' => $options['creditCard']['holder']['cpf'],
             'creditCardHolderBirthDate' => $options['creditCard']['holder']['birthDate'],
+            'creditCardHolder' . $docType => $options['creditCard']['holder']['document']['value'], //creditCardHolderCPF or creditCardHolderCNPJ
         ];
 
         return $parsed;
