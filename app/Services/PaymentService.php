@@ -179,6 +179,7 @@ class PaymentService
             'creditCardHolderCpf' => $options['creditCard']['holder']['cpf'],
             'creditCardHolderBirthDate' => $options['creditCard']['holder']['birthDate'],
             'creditCardHolder' . $docType => $options['creditCard']['holder']['document']['value'], //creditCardHolderCPF or creditCardHolderCNPJ
+            'creditCardHolderAreaCode' => $options['creditCard']['holder']['phone']['areaCode'],
         ];
 
         return $parsed;
