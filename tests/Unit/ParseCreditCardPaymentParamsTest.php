@@ -24,7 +24,8 @@ class ParseCreditCardPaymentParamsTest extends TestCase
                         'value' => $faker->cpf(false),
                     ],
                     'phone' => [
-                        'areaCode' => $faker->areaCode()
+                        'areaCode' => $faker->areaCode(),
+                        'number' => $faker->numberBetween(1000000, 999999999)
                     ]
                 ]
             ]
@@ -91,5 +92,14 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
         $this->assertEquals($result['creditCardHolderAreaCode'], $options['creditCard']['holder']['phone']['areaCode']);
+    }
+
+    public function testParseCreditCardPaymentParamsParsingCreditCardHolderPhone()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['creditCardHolderPhone'], $options['creditCard']['holder']['phone']['number']);
     }
 }
