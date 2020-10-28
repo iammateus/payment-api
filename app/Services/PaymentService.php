@@ -182,6 +182,7 @@ class PaymentService
             'creditCardHolderAreaCode' => $options['creditCard']['holder']['phone']['areaCode'],
             'creditCardHolderPhone' => $options['creditCard']['holder']['phone']['number'],
             'creditCardInstallmentValue' => $options['creditCard']['installment']['value'],
+            'creditCardInstallmentQuantity' => $options['creditCard']['installment']['quantity'],
         ];
 
         return $parsed;

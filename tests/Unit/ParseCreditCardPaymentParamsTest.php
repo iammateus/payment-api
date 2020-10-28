@@ -29,7 +29,8 @@ class ParseCreditCardPaymentParamsTest extends TestCase
                     ]
                 ],
                 'installment' => [
-                    'value' => $faker->randomFloat()
+                    'value' => $faker->randomFloat(),
+                    'quantity' => $faker->randomNumber()
                 ]
             ]
         ];
@@ -106,12 +107,21 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $this->assertEquals($result['creditCardHolderPhone'], $options['creditCard']['holder']['phone']['number']);
     }
 
-    public function testParseCreditCardPaymentParamsParsingInstallmentValue()
+    public function testParseCreditCardPaymentParamsParsingCreditCardInstallmentValue()
     {
         $options = $this->fakeOptions();
         $mock = Mockery::mock(PaymentService::class)->makePartial();
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
         $this->assertEquals($result['creditCardInstallmentValue'], $options['creditCard']['installment']['value']);
+    }
+
+    public function testParseCreditCardPaymentParamsParsingInstallmentQuantity()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['creditCardInstallmentQuantity'], $options['creditCard']['installment']['quantity']);
     }
 }
