@@ -181,6 +181,7 @@ class PaymentService
             'creditCardHolder' . $docType => $options['creditCard']['holder']['document']['value'], //creditCardHolderCPF or creditCardHolderCNPJ
             'creditCardHolderAreaCode' => $options['creditCard']['holder']['phone']['areaCode'],
             'creditCardHolderPhone' => $options['creditCard']['holder']['phone']['number'],
+            'creditCardInstallmentValue' => $options['creditCard']['installment']['value'],
         ];
 
         return $parsed;
