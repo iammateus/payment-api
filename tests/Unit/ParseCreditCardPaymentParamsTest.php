@@ -36,7 +36,8 @@ class ParseCreditCardPaymentParamsTest extends TestCase
             ],
             'billing' => [
                 'street' => $faker->text(),
-                'number' => $faker->word()
+                'number' => $faker->word(),
+                'district' => $faker->text()
             ]
         ];
     }
@@ -155,5 +156,14 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
         $this->assertEquals($result['billingAddressNumber'], $options['billing']['number']);
+    }
+
+    public function testParseCreditCardPaymentParamsParsingBillingAddressDistrict()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['billingAddressDistrict'], $options['billing']['district']);
     }
 }
