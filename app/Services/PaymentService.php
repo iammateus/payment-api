@@ -185,6 +185,7 @@ class PaymentService
             'installmentQuantity' => $options['creditCard']['installment']['quantity'],
             'noInterestInstallmentQuantity' => $options['creditCard']['maxInstallmentNoInterest'],
             'billingAddressStreet' => $options['billing']['street'],
+            'billingAddressNumber' => $options['billing']['number'],
         ];
 
         return $parsed;

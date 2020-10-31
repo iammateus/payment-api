@@ -35,7 +35,8 @@ class ParseCreditCardPaymentParamsTest extends TestCase
                 'maxInstallmentNoInterest' => $faker->randomNumber()
             ],
             'billing' => [
-                'street' => $faker->text()
+                'street' => $faker->text(),
+                'number' => $faker->word()
             ]
         ];
     }
@@ -145,5 +146,14 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
         $this->assertEquals($result['billingAddressStreet'], $options['billing']['street']);
+    }
+
+    public function testParseCreditCardPaymentParamsParsingBillingAddressNumber()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['billingAddressNumber'], $options['billing']['number']);
     }
 }
