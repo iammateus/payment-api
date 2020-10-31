@@ -189,6 +189,9 @@ class PaymentService
             'billingAddressDistrict' => $options['billing']['district'],
             'billingAddressPostalCode' => $options['billing']['postalCode'],
             'billingAddressComplement' => $options['billing']['complement'],
+            'billingAddressCity' => $options['billing']['city'],
+            'billingAddressState' => $options['billing']['state'],
+            'billingAddressCountry' => $options['billing']['country'],
         ];
 
         return $parsed;
