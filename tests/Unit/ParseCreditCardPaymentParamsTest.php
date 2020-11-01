@@ -216,4 +216,13 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $this->assertIsArray($result);
         $this->assertEquals($result['billingAddressComplement'], $options['billing']['complement']);
     }
+
+    public function testParseCreditCardPaymentParamsParsingPaymentMethod()
+    {
+        $options = $this->fakeOptions();
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+        $result = $mock->parseCreditCardPaymentParams($options);
+        $this->assertIsArray($result);
+        $this->assertEquals($result['paymentMethod'], 'creditCard');
+    }
 }

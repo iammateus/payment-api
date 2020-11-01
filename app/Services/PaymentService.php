@@ -174,6 +174,7 @@ class PaymentService
         $docType = $options['creditCard']['holder']['document']['type'];
 
         $parsed = [
+            'paymentMethod' => 'creditCard',
             'creditCardToken' => $options['creditCard']['token'],
             'creditCardHolderName' => $options['creditCard']['holder']['name'],
             'creditCardHolderCpf' => $options['creditCard']['holder']['cpf'],
