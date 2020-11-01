@@ -17,7 +17,6 @@ class ParseCreditCardPaymentParamsTest extends TestCase
                 'token' => $faker->text(),
                 'holder' => [
                     'name' => $faker->name(),
-                    'cpf' => $faker->cpf(false),
                     'birthDate' => $faker->date(),
                     'document' => [
                         'type' => 'CPF',
@@ -79,7 +78,7 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $mock = Mockery::mock(PaymentService::class)->makePartial();
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
-        $this->assertEquals($result['creditCardHolderCpf'], $options['creditCard']['holder']['cpf']);
+        $this->assertEquals($result['creditCardHolderCPF'], $options['creditCard']['holder']['document']['value']);
     }
 
     public function testParseCreditCardPaymentParamsParsingCreditCardHolderBirthDate()
@@ -124,7 +123,8 @@ class ParseCreditCardPaymentParamsTest extends TestCase
         $mock = Mockery::mock(PaymentService::class)->makePartial();
         $result = $mock->parseCreditCardPaymentParams($options);
         $this->assertIsArray($result);
-        $this->assertEquals($result['installmentValue'], $options['creditCard']['installment']['value']);
+        $expectedValue = number_format($options['creditCard']['installment']['value'], 2, '.', '');
+        $this->assertEquals($result['installmentValue'], $expectedValue);
     }
 
     public function testParseCreditCardPaymentParamsParsingInstallmentQuantity()

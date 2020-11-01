@@ -51,6 +51,19 @@ class PaymentService
 
     public function payWithCreditCard(array $options): array
     {
+        $methodParams = $this->parseCreditCardPaymentParams($options);
+        $defaultParams = $this->parseDefaultPaymentParams($options);
+        $itemsParams = $this->parseItems($options['items']);
+        $params = array_merge($defaultParams, $itemsParams, $methodParams);
+        var_dump($params);
+
+        $xmlEncodedPagseguroResponse = $this->makePagseguroRequest($params);
+        $xmlObjectPagseguroResponse = ResponseParser::parseXml($xmlEncodedPagseguroResponse);
+        $arrayPagseguroResponse = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
+
+        var_dump($arrayPagseguroResponse);
+        exit;
+
         return [];
     }
 
@@ -168,6 +181,7 @@ class PaymentService
 
     /**
      * Parses specific params of payment with credit card to Pagseguro's format
+     * @TODO: parse optional fields differently
      */
     public function parseCreditCardPaymentParams(array $options): array
     {
@@ -177,12 +191,11 @@ class PaymentService
             'paymentMethod' => 'creditCard',
             'creditCardToken' => $options['creditCard']['token'],
             'creditCardHolderName' => $options['creditCard']['holder']['name'],
-            'creditCardHolderCpf' => $options['creditCard']['holder']['cpf'],
             'creditCardHolderBirthDate' => $options['creditCard']['holder']['birthDate'],
             'creditCardHolder' . $docType => $options['creditCard']['holder']['document']['value'], //creditCardHolderCPF or creditCardHolderCNPJ
             'creditCardHolderAreaCode' => $options['creditCard']['holder']['phone']['areaCode'],
             'creditCardHolderPhone' => $options['creditCard']['holder']['phone']['number'],
-            'installmentValue' => $options['creditCard']['installment']['value'],
+            'installmentValue' => number_format($options['creditCard']['installment']['value'], 2, '.', ''),
             'installmentQuantity' => $options['creditCard']['installment']['quantity'],
             'noInterestInstallmentQuantity' => $options['creditCard']['maxInstallmentNoInterest'],
             'billingAddressStreet' => $options['billing']['street'],

@@ -201,7 +201,8 @@ class PaymentControllerTest extends TestCase
                 'district' => $faker->text(60),
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
-                'postalCode' => $faker->numberBetween(10000000, 99999999)
+                'postalCode' => $faker->numberBetween(10000000, 99999999),
+                'country' => $faker->randomElement(['BRA']),
             ]
         ];
 
@@ -1803,6 +1804,36 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'billing.complement' => ['The billing.complement may not be greater than 40 characters.']
+        ]);
+    }
+
+    public function testPayWithCreditCardWithoutSendingBillingAddressCountryExpectingUnprocessableEntity()
+    {
+        $data = [
+            'method' => 'CREDIT_CARD',
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.country' => ['The billing.country field is required when method is CREDIT_CARD.']
+        ]);
+    }
+
+    public function testPaySendingInvalidBillingCountryExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'billing' => [
+                'country' => $faker->text(1000)
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'billing.country' => ['The selected billing.country is invalid.']
         ]);
     }
 }
