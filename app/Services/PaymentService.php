@@ -39,15 +39,6 @@ class PaymentService
         return $response;
     }
 
-    public function formatPaymentWithBoletoResponse(array $arrayPagseguroResponse)
-    {
-        $response = [
-            'paymentLink' => $arrayPagseguroResponse['paymentLink']
-        ];
-
-        return $response;
-    }
-
     public function payWithCreditCard(array $options): array
     {
         $methodParams = $this->parseCreditCardPaymentParams($options);
