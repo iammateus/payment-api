@@ -1114,6 +1114,25 @@ class PaymentControllerTest extends TestCase
         ]);
     }
 
+    public function testPaySendingIncompleteCreditCardHolderNameExpectingUnprocessableEntity()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'creditCard' => [
+                'holder' => [
+                    'name' => $faker->word()
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'creditCard.holder.name' => ['The credit card.holder.name must have at last 2 words.']
+        ]);
+    }
+
     public function testPaySendingTooLongCreditCardHolderNameExpectingUnprocessableEntity()
     {
         $faker = Faker::create('pt_BR');
