@@ -55,16 +55,12 @@ class PaymentService
         $defaultParams = $this->parseDefaultPaymentParams($options);
         $itemsParams = $this->parseItems($options['items']);
         $params = array_merge($defaultParams, $itemsParams, $methodParams);
-        var_dump($params);
 
         $xmlEncodedPagseguroResponse = $this->makePagseguroRequest($params);
         $xmlObjectPagseguroResponse = ResponseParser::parseXml($xmlEncodedPagseguroResponse);
         $arrayPagseguroResponse = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
 
-        var_dump($arrayPagseguroResponse);
-        exit;
-
-        return [];
+        return $arrayPagseguroResponse;
     }
 
     public function makePagseguroRequest(array $paymentData): object
