@@ -1,11 +1,8 @@
 <?php
 
-use GuzzleHttp\Client;
 use Faker\Factory as Faker;
-use GuzzleHttp\HandlerStack;
 use Illuminate\Http\Response;
-use GuzzleHttp\Psr7\Response as MockResponse;
-use GuzzleHttp\Handler\MockHandler;
+use App\Mocks\PagseguroMocker;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
@@ -13,70 +10,13 @@ class PaymentControllerTest extends TestCase
 {
     public function mockBoletoResponse()
     {
-        //Setting mock client
-        $body = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
-                    <transaction>
-                        <date>2020-07-26T12:42:56.000-03:00</date>
-                        <code>02B62EF5-1824-4FCC-824A-9607348C6D08</code>
-                        <type>1</type>
-                        <status>1</status>
-                        <lastEventDate>2020-07-26T12:42:59.000-03:00</lastEventDate>
-                        <paymentMethod>
-                            <type>2</type>
-                            <code>202</code>
-                        </paymentMethod>
-                        <paymentLink>https://sandbox.pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=c0b4c231ab35affff4f36b511aa200813a220daec9db33d941d0005fd226f013f86940b74c2b5e55</paymentLink>
-                        <grossAmount>114.00</grossAmount>
-                        <discountAmount>0.00</discountAmount>
-                        <feeAmount>6.09</feeAmount>
-                        <netAmount>107.91</netAmount>
-                        <extraAmount>10.00</extraAmount>
-                        <installmentCount>1</installmentCount>
-                        <itemCount>3</itemCount>
-                        <items>
-                            <item>
-                                <id>1</id>
-                                <description>Produto 1</description>
-                                <quantity>2</quantity>
-                                <amount>2.00</amount>
-                            </item>
-                            <item>
-                                <id>2</id>
-                                <description>Produto 2</description>
-                                <quantity>1</quantity>
-                                <amount>60.00</amount>
-                            </item>
-                            <item>
-                                <id>3</id>
-                                <description>Produto 3</description>
-                                <quantity>2</quantity>
-                                <amount>20.00</amount>
-                            </item>
-                        </items>
-                        <sender>
-                            <name>Mateus Soares</name>
-                            <email>chagaswc89@sandbox.pagseguro.com.br</email>
-                            <phone>
-                                <areaCode>48</areaCode>
-                                <number>991510980</number>
-                            </phone>
-                            <documents>
-                                <document>
-                                    <type>CPF</type>
-                                    <value>71783955082</value>
-                                </document>
-                            </documents>
-                        </sender>
-                    </transaction>';
+        $client = PagseguroMocker::getMockedGuzzleInstanceWithPaymentWithBoletoResponse();
+        $this->app->instance('GuzzleHttp\Client', $client);
+    }
 
-        $headers = [
-            'Content-Type' => 'application/xml'
-        ];
-
-        $mock = new MockHandler([new MockResponse(Response::HTTP_OK, $headers, $body)]);
-        $handlerStack = HandlerStack::create($mock);
-
-        $client = new Client(['handler' => $handlerStack]);
+    public function mockCreditCardResponse()
+    {
+        $client = PagseguroMocker::getMockedGuzzleInstanceWithPaymentWithCredirCardResponse();
         $this->app->instance('GuzzleHttp\Client', $client);
     }
 
@@ -136,6 +76,7 @@ class PaymentControllerTest extends TestCase
 
     public function testPayWithCreditCardExpectingSuccess()
     {
+        $this->mockCreditCardResponse();
         $faker = Faker::create('pt_BR');
 
         $data = [
