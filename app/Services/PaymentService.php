@@ -181,7 +181,6 @@ class PaymentService
 
     /**
      * Parses specific params of payment with credit card to Pagseguro's format
-     * @TODO: parse optional fields differently
      */
     public function parseCreditCardPaymentParams(array $options): array
     {
@@ -202,11 +201,14 @@ class PaymentService
             'billingAddressNumber' => $options['billing']['number'],
             'billingAddressDistrict' => $options['billing']['district'],
             'billingAddressPostalCode' => $options['billing']['postalCode'],
-            'billingAddressComplement' => $options['billing']['complement'],
             'billingAddressCity' => $options['billing']['city'],
             'billingAddressState' => $options['billing']['state'],
             'billingAddressCountry' => $options['billing']['country'],
         ];
+
+        if (isset($options['billing']['complement'])) {
+            $parsed['billingAddressComplement'] = $options['billing']['complement'];
+        }
 
         return $parsed;
     }
