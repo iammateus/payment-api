@@ -34,9 +34,8 @@ class PaymentService
 
         $xmlEncodedPagseguroResponse = $this->makePagseguroRequest($params);
         $xmlObjectPagseguroResponse = ResponseParser::parseXml($xmlEncodedPagseguroResponse);
-        $arrayPagseguroResponse = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
+        $response = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
 
-        $response = $this->formatPaymentWithBoletoResponse($arrayPagseguroResponse);
         return $response;
     }
 
@@ -58,9 +57,9 @@ class PaymentService
 
         $xmlEncodedPagseguroResponse = $this->makePagseguroRequest($params);
         $xmlObjectPagseguroResponse = ResponseParser::parseXml($xmlEncodedPagseguroResponse);
-        $arrayPagseguroResponse = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
+        $response = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
 
-        return $arrayPagseguroResponse;
+        return $response;
     }
 
     public function makePagseguroRequest(array $paymentData): object
