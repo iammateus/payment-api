@@ -151,6 +151,62 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
 
         $this->assertResponseOk();
+        // @TODO: Make this test more complete
+    }
+
+    public function testPayWithOnlineDebitExpectingSuccess()
+    {
+        // $this->mockCreditCardResponse();
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'method' => 'ONLINE_DEBIT',
+            'sender' => [
+                'name' => $faker->name(),
+                'document' => [
+                    'type' =>  'CNPJ',
+                    'value' => $faker->cnpj(false)
+                ],
+                'phone' => [
+                    'areaCode' => $faker->areaCode(),
+                    'number' => $faker->numberBetween(10000000, 999999999)
+                ],
+                'email' => $faker->email,
+                'hash' => $faker->word()
+            ],
+            'shipping' => [
+                'addressRequired' => true,
+                'street' => $faker->streetName,
+                'number' => $faker->text(20),
+                'district' => $faker->text(60),
+                'city' => $faker->city,
+                'state' => $faker->stateAbbr,
+                'country' => $faker->randomElement(['BRA']),
+                'postalCode' => $faker->numberBetween(10000000, 99999999),
+                'cost' => $faker->randomFloat(),
+                'type' => $faker->randomElement([1, 2, 3]),
+            ],
+            'reference' => $faker->text(200),
+            'extraAmount' => 0,
+            'bank' => [
+                'name' => $faker->randomElement(['BANRISUL', 'BANCO_BRASIL', 'BRADESCO', 'ITAU']),
+            ],
+            'items' => [
+                [
+                    'id' => $faker->text(36),
+                    'description' => $faker->text(100),
+                    'quantity' => $faker->numberBetween(1, 100),
+                    'amount' => $faker->randomFloat(2, 1, 10000)
+                ]
+            ]
+        ];
+
+        $this->post('/payment', $data);
+
+        var_dump($this->response);
+
+        $this->assertResponseOk();
+        // @TODO: Make this test more complete
     }
 
     public function testPayWithoutSendingPaymentMethodExpectingUnprocessableEntity()
@@ -1794,6 +1850,49 @@ class PaymentControllerTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->seeJson([
             'billing.country' => ['The selected billing.country is invalid.']
+        ]);
+    }
+
+    public function testPayWithOnlineDebitWithoutSendingBank()
+    {
+        $data = [
+            'method' => 'ONLINE_DEBIT',
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'bank' => ['The bank field is required when method is ONLINE_DEBIT.']
+        ]);
+    }
+
+    public function testPayWithOnlineDebitWithoutSendingBankName()
+    {
+        $data = [
+            'method' => 'ONLINE_DEBIT',
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'bank.name' => ['The bank.name field is required when method is ONLINE_DEBIT.']
+        ]);
+    }
+
+    public function testPaySendingInvalidBankName()
+    {
+        $faker = Faker::create('pt_BR');
+
+        $data = [
+            'bank' => [
+                'name' => $faker->word()
+            ],
+        ];
+
+        $this->post('/payment', $data);
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'bank.name' => ['The selected bank.name is invalid.']
         ]);
     }
 }

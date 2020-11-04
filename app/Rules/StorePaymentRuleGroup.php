@@ -6,7 +6,7 @@ class StorePaymentRuleGroup extends RuleGroup
 {
 
     protected static array $rules = [
-        'method' => 'required|in:BOLETO,CREDIT_CARD',
+        'method' => 'required|in:BOLETO,CREDIT_CARD,ONLINE_DEBIT',
         'sender' => 'required',
         'sender.name' => 'required|string|min_words:2',
         'sender.document' => 'required',
@@ -59,6 +59,9 @@ class StorePaymentRuleGroup extends RuleGroup
         'billing.state' => 'required_if:method,CREDIT_CARD|size:2',
         'billing.country' => 'required_if:method,CREDIT_CARD|in:BRA',
         'billing.postalCode' => 'required_if:method,CREDIT_CARD|digits:8',
-        'billing.complement' => 'max:40'
+        'billing.complement' => 'max:40',
+        'bank' => 'required_if:method,ONLINE_DEBIT',
+        'bank.name' => 'required_if:method,ONLINE_DEBIT|in:BANRISUL,BANCO_BRASIL,BRADESCO,ITAU'
+        // TODO: Add reference field
     ];
 }
