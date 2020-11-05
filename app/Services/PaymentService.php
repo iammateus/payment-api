@@ -57,7 +57,16 @@ class PaymentService
 
     public function payWithOnlineDebit(array $options): array
     {
-        return [];
+        $methodParams = $this->parseOnlineDebitPaymentParams($options);
+        $defaultParams = $this->parseDefaultPaymentParams($options);
+        $itemsParams = $this->parseItems($options['items']);
+        $params = array_merge($defaultParams, $itemsParams, $methodParams);
+
+        $xmlEncodedPagseguroResponse = $this->makePagseguroRequest($params);
+        $xmlObjectPagseguroResponse = ResponseParser::parseXml($xmlEncodedPagseguroResponse);
+        $response = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
+
+        return $response;
     }
 
     public function makePagseguroRequest(array $paymentData): object
@@ -173,12 +182,13 @@ class PaymentService
     }
 
     /**
-     * Parses specific params of payment with boleto option to Pagseguro's format
+     * Parses specific params of payment with onli option to Pagseguro's format
      */
-    public function parseOnlineDebitPaymentParams(): array
+    public function parseOnlineDebitPaymentParams(array $options): array
     {
         $parsed = [
             'paymentMethod' => 'eft',
+            'bankName' => $options['bank']['name']
         ];
 
         return $parsed;
