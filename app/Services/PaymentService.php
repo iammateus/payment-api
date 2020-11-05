@@ -173,6 +173,18 @@ class PaymentService
     }
 
     /**
+     * Parses specific params of payment with boleto option to Pagseguro's format
+     */
+    public function parseOnlineDebitPaymentParams(): array
+    {
+        $parsed = [
+            'paymentMethod' => 'eft',
+        ];
+
+        return $parsed;
+    }
+
+    /**
      * Parses specific params of payment with credit card to Pagseguro's format
      */
     public function parseCreditCardPaymentParams(array $options): array
