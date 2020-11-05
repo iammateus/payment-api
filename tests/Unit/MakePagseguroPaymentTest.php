@@ -31,4 +31,18 @@ class MakePagseguroPaymentTest extends TestCase
 
         $mock->shouldHaveReceived('payWithCreditCard');
     }
+
+    public function testMakePagseguroPaymentSendingOnlineDebitAsPaymentMethodExpectingPayWithOnlineDebitToBeCalled()
+    {
+        $mock = Mockery::mock(PaymentService::class)->makePartial();
+
+        try {
+            $mock->makePagseguroPayment([
+                'method' => 'ONLINE_DEBIT'
+            ]);
+        } catch (Exception $e) {
+        }
+
+        $mock->shouldHaveReceived('payWithOnlineDebit');
+    }
 }

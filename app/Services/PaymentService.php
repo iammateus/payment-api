@@ -22,6 +22,8 @@ class PaymentService
                 return $this->payWithBoleto($options);
             case 'CREDIT_CARD':
                 return $this->payWithCreditCard($options);
+            case 'ONLINE_DEBIT':
+                return $this->payWithOnlineDebit($options);
         }
     }
 
@@ -51,6 +53,11 @@ class PaymentService
         $response = SimpleXMLElementParser::parseToArray($xmlObjectPagseguroResponse);
 
         return $response;
+    }
+
+    public function payWithOnlineDebit(array $options): array
+    {
+        return [];
     }
 
     public function makePagseguroRequest(array $paymentData): object
