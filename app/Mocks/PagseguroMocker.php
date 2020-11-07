@@ -78,7 +78,7 @@ class PagseguroMocker
         return $client;
     }
 
-    public static function getMockedGuzzleInstanceWithPaymentWithCredirCardResponse()
+    public static function getMockedGuzzleInstanceWithPaymentWithCreditCardResponse()
     {
         $xmlPagseguroResponse = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>
                                     <transaction>
@@ -157,6 +157,90 @@ class PagseguroMocker
                                             <establishmentCode>1056784170</establishmentCode>
                                             <acquirerName>CIELO</acquirerName>
                                         </gatewaySystem>
+                                    </transaction>";
+
+        $headers = [
+            'Content-Type' => 'application/xml'
+        ];
+
+        $mock = new MockHandler([new MockResponse(Response::HTTP_OK, $headers, $xmlPagseguroResponse)]);
+        $handlerStack = HandlerStack::create($mock);
+
+        $client = new Client(['handler' => $handlerStack]);
+        return $client;
+    }
+
+    public static function getMockedGuzzleInstanceWithPaymentWithOnlineDebitResponse()
+    {
+        $xmlPagseguroResponse = "<?xml version='1.0' encoding='UTF-8'?>
+                                    <transaction>
+                                    <date>2020-11-05T19:59:14.000-03:00</date>
+                                    <code>0B7E653B-80A9-40BB-BBA9-3AD8EC0E0118</code>
+                                    <reference>Teste Pagseguro React</reference>
+                                    <recoveryCode>7df5a68dd88c50bbbfe3c08f8cf9dc9993093c62495f251b</recoveryCode>
+                                    <type>1</type>
+                                    <status>1</status>
+                                    <lastEventDate>2020-11-05T19:59:15.000-03:00</lastEventDate>
+                                    <paymentMethod>
+                                        <type>3</type>
+                                        <code>304</code>
+                                    </paymentMethod>
+                                    <paymentLink>https://sandbox.pagseguro.uol.com.br/checkout/payment/eft/print.jhtml?c=170ca80fa1369b8debfbb9d8c8871a321fc7725e512c7597815176a762f5d231cb365c8c8886292c</paymentLink>
+                                    <grossAmount>114.00</grossAmount>
+                                    <discountAmount>0.00</discountAmount>
+                                    <feeAmount>6.09</feeAmount>
+                                    <netAmount>107.91</netAmount>
+                                    <extraAmount>10.00</extraAmount>
+                                    <installmentCount>1</installmentCount>
+                                    <itemCount>3</itemCount>
+                                    <items>
+                                        <item>
+                                            <id>1</id>
+                                            <description>Produto 1</description>
+                                            <quantity>2</quantity>
+                                            <amount>2.00</amount>
+                                        </item>
+                                        <item>
+                                            <id>2</id>
+                                            <description>Produto 2</description>
+                                            <quantity>1</quantity>
+                                            <amount>60.00</amount>
+                                        </item>
+                                        <item>
+                                            <id>3</id>
+                                            <description>Produto 3</description>
+                                            <quantity>2</quantity>
+                                            <amount>20.00</amount>
+                                        </item>
+                                    </items>
+                                    <sender>
+                                        <name>Mateus Soares</name>
+                                        <email>chagaswc89@sandbox.pagseguro.com.br</email>
+                                        <phone>
+                                            <areaCode>48</areaCode>
+                                            <number>991510980</number>
+                                        </phone>
+                                        <documents>
+                                            <document>
+                                                <type>CPF</type>
+                                                <value>71783955082</value>
+                                            </document>
+                                        </documents>
+                                    </sender>
+                                    <shipping>
+                                        <address>
+                                            <street>Largo Eduardo Zamana</street>
+                                            <number>Et facilis ut.</number>
+                                            <complement />
+                                            <district>Eum impedit qui reiciendis est officia ex.</district>
+                                            <city>Porto Micaela do Leste</city>
+                                            <state>DF</state>
+                                            <country>BRA</country>
+                                            <postalCode>42737128</postalCode>
+                                        </address>
+                                        <type>3</type>
+                                        <cost>0.00</cost>
+                                    </shipping>
                                     </transaction>";
 
         $headers = [

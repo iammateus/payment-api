@@ -16,7 +16,13 @@ class PaymentControllerTest extends TestCase
 
     public function mockCreditCardResponse()
     {
-        $client = PagseguroMocker::getMockedGuzzleInstanceWithPaymentWithCredirCardResponse();
+        $client = PagseguroMocker::getMockedGuzzleInstanceWithPaymentWithCreditCardResponse();
+        $this->app->instance('GuzzleHttp\Client', $client);
+    }
+
+    public function mockOnlineDebitResponse()
+    {
+        $client = PagseguroMocker::getMockedGuzzleInstanceWithPaymentWithOnlineDebitResponse();
         $this->app->instance('GuzzleHttp\Client', $client);
     }
 
@@ -156,7 +162,7 @@ class PaymentControllerTest extends TestCase
 
     public function testPayWithOnlineDebitExpectingSuccess()
     {
-        // $this->mockCreditCardResponse();
+        $this->mockOnlineDebitResponse();
         $faker = Faker::create('pt_BR');
 
         $data = [
@@ -202,8 +208,6 @@ class PaymentControllerTest extends TestCase
         ];
 
         $this->post('/payment', $data);
-
-        var_dump($this->response);
 
         $this->assertResponseOk();
         // @TODO: Make this test more complete
