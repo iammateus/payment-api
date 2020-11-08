@@ -22,7 +22,6 @@ class PaymentController extends Controller
 
         $this->validate($request, $rules);
 
-        //TODO: Accept Credit Card and Online Debit options
         $payment = $this->paymentService->makePagseguroPayment($request->all());
 
         return response()->json([
