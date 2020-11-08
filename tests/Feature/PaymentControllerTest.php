@@ -72,6 +72,9 @@ class PaymentControllerTest extends TestCase
 
         $this->post('/payment', $data);
         $this->assertResponseOk();
+        $this->seeJson([
+            'message' => 'SUCCESS'
+        ]);
         $this->seeJsonStructure([
             'message',
             'data' => [
@@ -157,7 +160,9 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
 
         $this->assertResponseOk();
-        // @TODO: Make this test more complete
+        $this->seeJson([
+            'message' => 'SUCCESS'
+        ]);
     }
 
     public function testPayWithOnlineDebitExpectingSuccess()
@@ -210,7 +215,15 @@ class PaymentControllerTest extends TestCase
         $this->post('/payment', $data);
 
         $this->assertResponseOk();
-        // @TODO: Make this test more complete
+        $this->seeJson([
+            'message' => 'SUCCESS'
+        ]);
+        $this->seeJsonStructure([
+            'message',
+            'data' => [
+                'paymentLink'
+            ]
+        ]);
     }
 
     public function testPayWithoutSendingPaymentMethodExpectingUnprocessableEntity()
