@@ -62,6 +62,5 @@ class StorePaymentRuleGroup extends RuleGroup
         'billing.complement' => 'max:40',
         'bank' => 'required_if:method,ONLINE_DEBIT',
         'bank.name' => 'required_if:method,ONLINE_DEBIT|in:BANRISUL,BANCO_BRASIL,BRADESCO,ITAU'
-        // TODO: Add reference field
     ];
 }
