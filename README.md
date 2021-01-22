@@ -1,10 +1,10 @@
 
 # Payment API
-A RESTful payment API that integrates with Pagseguro's API Checkout Transparente. It offers all of Pagseguro's options of payment and validations.
+A payment API that integrates with Pagseguro's API Checkout Transparente. It offers all of Pagseguro's validations, and options of payment.
 
 This project was created for learning purposes and to serve as an example of the use of third party APIs.
 
-Accepted payment methods: Boleto, Credit Card, and Online Debit.
+The accepted payment methods are Boleto, Credit Card, and Online Debit.
 
 ## Requeriments
 
