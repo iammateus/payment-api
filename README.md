@@ -1,6 +1,6 @@
 
 # Payment API
-A payment API that integrates with Pagseguro's API Checkout Transparente. It offers all of Pagseguro's validations, and options of payment.
+A payment API that integrates with Pagseguro's API Checkout Transparente. It offers all Pagseguro's validations, and options of payment.
 
 This project was created for learning purposes and to serve as an example of the use of third party APIs.
 
