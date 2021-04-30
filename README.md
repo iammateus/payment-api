@@ -8,8 +8,8 @@ The accepted payment methods are Boleto, Credit Card, and Online Debit.
 
 ## Requeriments
 
-1. This project runs on [Docker](https://docs.docker.com/).
-2. [Pagseguro](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) credentials.
+- [Docker](https://docs.docker.com/)
+- [Pagseguro](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) credentials
 
 ## Installation
 
@@ -25,9 +25,7 @@ Run tests filtered by test name or test file
 
     $ composer test -- --filter { filename/test name }
     
-## Env
-
-A list of required environment variables that you need to set in the .env file:
+## Environment Variables
 
 | Name | Value |
 |--|--|
