@@ -9,7 +9,7 @@ The accepted payment methods are Boleto, Credit Card, and Online Debit.
 ## Requeriments
 
 - [Docker](https://docs.docker.com/)
-- [Pagseguro](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) credentials
+- [Pagseguro credentials](https://dev.pagseguro.uol.com.br/reference/checkout-transparente#autenticacao) 
 
 ## Installation
 
